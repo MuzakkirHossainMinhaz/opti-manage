@@ -4,6 +4,10 @@ import { IUser, UserModels } from "./user.interface";
 
 const userSchema = new mongoose.Schema<IUser, UserModels>(
   {
+    fullName: {
+      type: String,
+      trim: true,
+    },
     username: {
       type: String,
       required: [true, "Username is required"],

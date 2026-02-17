@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
+import { seedManager } from "./utils/seedManager";
 
 dotenv.config();
 
@@ -11,14 +12,16 @@ const PORT = process.env.PORT || 5000;
 
 async function main() {
   try {
-    // listen for requests
-    server = app.listen(PORT, () => {
-      console.log(`🌐 Server is running on http://localhost:${PORT}`);
-    });
-
     // connect to database
     await mongoose.connect(`${process.env.DATABASE_URL}`).then(() => {
       console.log("⚡️Successfully connected to the database");
+    });
+
+    await seedManager();
+
+    // listen for requests
+    server = app.listen(PORT, () => {
+      console.log(`🌐 Server is running on http://localhost:${PORT}`);
     });
   } catch (err) {
     console.log(err);

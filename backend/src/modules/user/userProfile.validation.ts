@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const userValidationSchema = z.object({
+export const updateProfileValidationSchema = z.object({
   fullName: z
     .string({
       invalid_type_error: "Full name must be a string",
@@ -9,23 +9,32 @@ const userValidationSchema = z.object({
     .optional(),
   username: z
     .string({
-      required_error: "Username is required",
       invalid_type_error: "Username must be a string",
     })
-    .trim(),
+    .trim()
+    .optional(),
   email: z
     .string({
-      required_error: "Email is required",
       invalid_type_error: "Email must be a string",
     })
     .trim()
     .email({
       message: "Invalid email address",
-    }),
-  password: z
+    })
+    .optional(),
+});
+
+export const changePasswordValidationSchema = z.object({
+  currentPassword: z
     .string({
-      required_error: "Password is required",
-      invalid_type_error: "Password must be a string",
+      required_error: "Current password is required",
+      invalid_type_error: "Current password must be a string",
+    })
+    .trim(),
+  newPassword: z
+    .string({
+      required_error: "New password is required",
+      invalid_type_error: "New password must be a string",
     })
     .trim()
     .min(6, {
@@ -40,4 +49,3 @@ const userValidationSchema = z.object({
     }),
 });
 
-export default userValidationSchema;

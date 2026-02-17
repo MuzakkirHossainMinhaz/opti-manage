@@ -1,14 +1,17 @@
-import { MenuFoldOutlined, MenuUnfoldOutlined, UserOutlined } from "@ant-design/icons";
+import { MenuFoldOutlined, MenuUnfoldOutlined, UserAddOutlined, UserOutlined } from "@ant-design/icons";
 import { Avatar, Button, Layout, Tag, theme } from "antd";
 import { useState } from "react";
-import { Outlet } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
 import { useAppSelector } from "../../redux/hooks";
+import CreateUserModal from "../users/CreateUserModal";
 import Sidebar from "./Sidebar";
 const { Header, Content, Footer } = Layout;
 
 const MainLayout = () => {
   const user = useAppSelector((state) => state.auth.user);
   const [collapsed, setCollapsed] = useState(false);
+  const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
+  const navigate = useNavigate();
   const {
     token: { colorBgContainer, borderRadiusLG, colorPrimary, colorPrimaryBg },
   } = theme.useToken();
@@ -50,6 +53,16 @@ const MainLayout = () => {
             }}
           />
           <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+            {user?.role === "manager" && (
+              <Button
+                type="primary"
+                size="small"
+                icon={<UserAddOutlined />}
+                onClick={() => setIsCreateUserOpen(true)}
+              >
+                Add User
+              </Button>
+            )}
             <div
               style={{
                 display: "flex",
@@ -89,6 +102,7 @@ const MainLayout = () => {
             <Avatar
               size={42}
               icon={<UserOutlined />}
+              onClick={() => navigate("/profile")}
               style={{
                 backgroundColor: colorPrimaryBg,
                 color: colorPrimary,
@@ -123,7 +137,7 @@ const MainLayout = () => {
             display: "flex",
             justifyContent: "center",
             alignItems: "center",
-            background: "transparent",
+            background: "#fff",
             flexShrink: 0,
             color: "#8c8c8c",
             fontSize: "13px",
@@ -159,6 +173,7 @@ const MainLayout = () => {
             <span>All rights reserved.</span>
           </div>
         </Footer>
+        <CreateUserModal open={isCreateUserOpen} onClose={() => setIsCreateUserOpen(false)} />
       </Layout>
     </Layout>
   );

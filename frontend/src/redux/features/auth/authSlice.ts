@@ -4,7 +4,9 @@ import { RootState } from "../../store";
 export interface IUser {
   _id: string;
   username: string;
-  role: string;
+  role: "manager" | "user";
+  email?: string;
+  fullName?: string;
   iat: number;
   exp: number;
 }

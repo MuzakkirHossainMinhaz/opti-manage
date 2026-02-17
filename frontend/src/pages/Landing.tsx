@@ -1,10 +1,4 @@
-import {
-  BarChartOutlined,
-  LoginOutlined,
-  SafetyCertificateOutlined,
-  TeamOutlined,
-  ThunderboltOutlined,
-} from "@ant-design/icons";
+import { BarChartOutlined, LoginOutlined, SafetyCertificateOutlined, TeamOutlined, ThunderboltOutlined } from "@ant-design/icons";
 import { Button, Card, Col, Grid, Layout, Row, Space, theme, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from "../../public/logo.png";
@@ -98,14 +92,9 @@ const Landing = () => {
           <Button onClick={() => navigate("/login")} style={{ fontWeight: 500, borderRadius: "20px" }}>
             Log in
           </Button>
-          <Button
-            type="primary"
-            shape="round"
-            onClick={() => navigate("/register")}
-            style={{ fontWeight: 500, borderRadius: "26px" }}
-          >
-            Get Started
-          </Button>
+            <Button type="primary" size="large" onClick={() => navigate("/login")} style={{ fontWeight: 500, borderRadius: "26px" }}>
+              Sign In
+            </Button>
         </Space>
       </Header>
 
@@ -186,30 +175,18 @@ const Landing = () => {
                 Streamline your optical business with our all-in-one platform for inventory, sales, and customer
                 management. Simple, powerful, and secure.
               </Paragraph>
-              <Space size="middle" wrap style={{ justifyContent: screens.md ? "flex-start" : "center" }}>
+              <Space size="middle" wrap>
                 <Button
                   type="primary"
-                  size="large"
-                  onClick={() => navigate("/register")}
-                  style={{
-                    height: "52px",
-                    padding: "0 40px",
-                    fontSize: "1.1rem",
-                    borderRadius: "26px",
-                    boxShadow: `0 4px 14px 0 ${colorPrimary}63`, // 63 is approx 39% opacity
-                  }}
-                >
-                  Start Free Trial
-                </Button>
-                <Button
                   size="large"
                   icon={<LoginOutlined />}
                   onClick={() => navigate("/login")}
                   style={{
                     height: "52px",
-                    padding: "0 30px",
+                    padding: "0 40px",
                     fontSize: "1.1rem",
                     borderRadius: "26px",
+                    boxShadow: `0 4px 14px 0 ${colorPrimary}63`,
                   }}
                 >
                   Sign In
@@ -378,7 +355,7 @@ const Landing = () => {
             <Button
               type="primary"
               size="large"
-              onClick={() => navigate("/register")}
+              onClick={() => navigate("/login")}
               style={{
                 height: "56px",
                 padding: "0 48px",
@@ -386,7 +363,7 @@ const Landing = () => {
                 borderRadius: "28px",
               }}
             >
-              Get Started Now
+              Sign In
             </Button>
           </div>
         </div>

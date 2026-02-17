@@ -41,6 +41,11 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
     ...(user?.role === "manager"
       ? [
           {
+            key: "/users",
+            icon: <HistoryOutlined />,
+            label: "Users",
+          },
+          {
             key: "/activity-log",
             icon: <HistoryOutlined />,
             label: "Activity Log",

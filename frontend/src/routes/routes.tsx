@@ -3,11 +3,12 @@ import App from "../App";
 import Dashboard from "../pages/dashboard/Dashboard";
 import ActivityLog from "../pages/dashboard/ActivityLog";
 import EyeGlasses from "../pages/dashboard/EyeGlasses";
+import Profile from "../pages/dashboard/Profile";
+import UserManagement from "../pages/dashboard/UserManagement";
 import Invoice from "../pages/dashboard/sales/Invoice";
 import SalesHistory from "../pages/dashboard/SalesHistory";
 import Landing from "../pages/Landing";
 import Login from "../pages/Login";
-import Register from "../pages/Register";
 
 const router = createBrowserRouter([
   {
@@ -34,6 +35,14 @@ const router = createBrowserRouter([
         element: <ActivityLog />,
       },
       {
+        path: "users",
+        element: <UserManagement />,
+      },
+      {
+        path: "profile",
+        element: <Profile />,
+      },
+      {
         path: "invoice-download/:id",
         element: <Invoice />,
       },
@@ -42,10 +51,6 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  },
-  {
-    path: "/register",
-    element: <Register />,
   },
 ]);
 

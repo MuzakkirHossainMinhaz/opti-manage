@@ -4,7 +4,7 @@ import { verifyJWT } from "../modules/auth/auth.utils";
 import { UserModel } from "../modules/user/user.model";
 import catchAsync from "../utils/catchAsync";
 
-const auth = () => {
+const auth = (...roles: string[]) => {
   return catchAsync(async (req, _res, next) => {
     const token = req.headers.authorization;
 
@@ -29,6 +29,10 @@ const auth = () => {
 
     // set user
     req.user = user;
+
+    if (roles.length && !roles.includes(user.role)) {
+      throw new AppError(httpStatus.FORBIDDEN, "Forbidden Access");
+    }
 
     next();
   });

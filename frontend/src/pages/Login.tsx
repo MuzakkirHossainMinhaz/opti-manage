@@ -121,12 +121,6 @@ const Login = () => {
                 </div>
               </Form>
 
-              <div style={{ textAlign: "center", marginTop: "20px" }}>
-                <Text>New to OptiManage? </Text>
-                <Button type="link" onClick={() => navigate("/register")} style={{ padding: 0, fontWeight: 600 }}>
-                  Create an account
-                </Button>
-              </div>
             </Card>
 
             <Alert
