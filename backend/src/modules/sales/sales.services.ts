@@ -41,14 +41,37 @@ const createSale = async (userData: JwtPayload, payload: Omit<ISales, "sellerId"
   return await SalesModel.findById(sale._id).populate("sellerId", "name email").populate("productId", "name price");
 };
 
-const getAllSales = async (userData: JwtPayload) => {
-  let sales = await SalesModel.find().populate("sellerId", "name email").populate("productId", "name price");
+const getAllSales = async (userData: JwtPayload, query: any) => {
+  const page = Number(query.page) || 1;
+  const limit = Number(query.limit) || 0;
+
+  const filter: Record<string, unknown> = {};
 
   if (userData.role === "user") {
-    sales = sales.filter((sale: ISales) => sale.sellerId._id.toString() === userData._id.toString());
+    filter.sellerId = userData._id;
   }
 
-  return sales;
+  const skip = limit > 0 ? (page - 1) * limit : 0;
+
+  let mongoQuery = SalesModel.find(filter)
+    .populate("sellerId", "name email")
+    .populate("productId", "name price");
+
+  if (limit > 0) {
+    mongoQuery = mongoQuery.skip(skip).limit(limit);
+  }
+
+  const [sales, total] = await Promise.all([mongoQuery, SalesModel.countDocuments(filter)]);
+
+  const effectiveLimit = limit || total || 1;
+
+  return {
+    sales,
+    total,
+    page,
+    limit: effectiveLimit,
+    totalPages: Math.ceil((total || 1) / effectiveLimit),
+  };
 };
 
 const getSalesById = async (userData: JwtPayload, id: string) => {

@@ -1,8 +1,10 @@
-import { Alert, Table, Tag, theme } from "antd";
+import { Alert, Table, Tag, Typography, theme } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useGetActivityLogsQuery } from "../../redux/features/activityLog/activityLogApi";
 import { useAppSelector } from "../../redux/hooks";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
+
+const { Title, Text } = Typography;
 
 type TActivityLog = {
   _id: string;
@@ -90,6 +92,18 @@ const ActivityLog = () => {
         border: "none",
       }}
     >
+      <div
+        style={{
+          marginBottom: 16,
+        }}
+      >
+        <Title level={3} style={{ margin: 0 }}>
+          Activity Log
+        </Title>
+        <Text type="secondary" style={{ fontSize: 13 }}>
+          Review who did what in the system. Only managers can see this audit trail.
+        </Text>
+      </div>
       {isError && (
         <Alert
           type="error"
@@ -112,4 +126,3 @@ const ActivityLog = () => {
 };
 
 export default ActivityLog;
-

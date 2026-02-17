@@ -1,11 +1,11 @@
-import { Button, Popconfirm, Table, Tag, Typography, Alert } from "antd";
+import { Alert, Button, Popconfirm, Table, Tag, theme, Typography } from "antd";
 import type { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { toast } from "sonner";
 import CreateUserModal from "../../components/users/CreateUserModal";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useAppSelector } from "../../redux/hooks";
 import { useDeleteUserMutation, useGetUsersQuery } from "../../redux/features/user/userApi";
+import { useAppSelector } from "../../redux/hooks";
 
 const { Title, Text } = Typography;
 
@@ -18,6 +18,9 @@ type TUserRow = {
 };
 
 const UserManagement = () => {
+  const {
+    token: { colorBgContainer, borderRadiusLG },
+  } = theme.useToken();
   const currentUser = useAppSelector(selectCurrentUser);
   const { data, isLoading, isError, error, refetch } = useGetUsersQuery(undefined);
   const [deleteUser] = useDeleteUserMutation();
@@ -106,7 +109,11 @@ const UserManagement = () => {
   return (
     <div
       style={{
-        padding: 20,
+        padding: "20px",
+        background: colorBgContainer,
+        borderRadius: borderRadiusLG,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+        border: "none",
       }}
     >
       <div
@@ -145,7 +152,8 @@ const UserManagement = () => {
         loading={isLoading}
         columns={columns}
         dataSource={users}
-        pagination={{ pageSize: 10 }}
+        pagination={{ pageSize: 20, showSizeChanger: true }}
+        scroll={{ x: 800 }}
       />
 
       <CreateUserModal
@@ -160,4 +168,3 @@ const UserManagement = () => {
 };
 
 export default UserManagement;
-

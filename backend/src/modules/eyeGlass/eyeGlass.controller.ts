@@ -26,17 +26,6 @@ const deleteEyeGlassByIds = catchAsync(async (req, res) => {
   });
 });
 
-const deleteAllEyeGlasses = catchAsync(async (req, res) => {
-  const eyeGlasses = await EyeGlassServices.deleteAllEyeGlasses(req.user);
-
-  sendResponse(res, {
-    success: true,
-    statusCode: httpStatus.OK,
-    message: "All Eye Glasses deleted successfully",
-    data: eyeGlasses,
-  });
-});
-
 const updateEyeGlassById = catchAsync(async (req, res) => {
   const eyeGlassId = req.params.eyeGlassId as string;
   const eyeGlass = await EyeGlassServices.updateEyeGlassById(eyeGlassId, req.user, req.body);
@@ -100,7 +89,6 @@ const getEyeGlassById = catchAsync(async (req, res) => {
 export const EyeGlassControllers = {
   createEyeGlass,
   deleteEyeGlassByIds,
-  deleteAllEyeGlasses,
   updateEyeGlassById,
   getAllEyeGlasses,
   getEyeGlassById,

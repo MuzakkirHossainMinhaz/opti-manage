@@ -35,13 +35,6 @@ const eyeGlassApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["EyeGlasses"],
     }),
-    deleteAllEyeGlasses: builder.mutation({
-      query: () => ({
-        url: `/eye-glasses/delete-all`,
-        method: "DELETE",
-      }),
-      invalidatesTags: ["EyeGlasses"],
-    }),
     updateEyeGlass: builder.mutation({
       query: (updatedEyeGlass) => ({
         url: `/eye-glasses/${updatedEyeGlass._id}`,
@@ -58,6 +51,5 @@ export const {
   useGetEyeGlassQuery,
   useCreateEyeGlassMutation,
   useDeleteEyeGlassMutation,
-  useDeleteAllEyeGlassesMutation,
   useUpdateEyeGlassMutation,
 } = eyeGlassApi;

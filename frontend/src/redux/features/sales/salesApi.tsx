@@ -11,9 +11,11 @@ const salesApi = baseApi.injectEndpoints({
       invalidatesTags: ["EyeGlasses", "Sales"],
     }),
     getAllSales: builder.query({
-      query: () => {
-        return { url: "/sales", method: "GET" };
-      },
+      query: (params?: { page?: number; limit?: number }) => ({
+        url: "/sales",
+        method: "GET",
+        params,
+      }),
       providesTags: ["Sales"],
     }),
     getSaleById: builder.query({

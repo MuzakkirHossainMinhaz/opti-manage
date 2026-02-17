@@ -15,13 +15,19 @@ const createSale = catchAsync(async (req, res) => {
 });
 
 const getAllSales = catchAsync(async (req, res) => {
-  const sales = await SalesServices.getAllSales(req.user);
+  const result = await SalesServices.getAllSales(req.user, req.query);
 
-  sendResponse(res, {
+  res.status(httpStatus.OK).json({
     success: true,
     statusCode: httpStatus.OK,
     message: "Sales fetched successfully",
-    data: sales,
+    meta: {
+      page: result.page,
+      limit: result.limit,
+      total: result.total,
+      totalPages: result.totalPages,
+    },
+    data: result.sales,
   });
 });
 

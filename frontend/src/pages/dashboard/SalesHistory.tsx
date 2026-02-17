@@ -1,7 +1,7 @@
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import type { InputRef, TableColumnType, TableColumnsType, TableProps } from "antd";
-import { Button, Input, Select, Space, Table, theme } from "antd";
+import { Button, Input, Select, Space, Table, Typography, theme } from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useEffect, useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
@@ -28,6 +28,8 @@ type OnChange = NonNullable<TableProps<TDataType>["onChange"]>;
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
 
+const { Title, Text } = Typography;
+
 const SalesHistory: React.FC = () => {
   const {
     token: { colorBgContainer, borderRadiusLG },
@@ -38,8 +40,12 @@ const SalesHistory: React.FC = () => {
   const searchInput = useRef<InputRef>(null);
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [salesData, setSalesData] = useState<TDataType[]>([]);
+  const [pagination, setPagination] = useState({ current: 1, pageSize: 10 });
 
-  const { data, isLoading } = useGetAllSalesQuery(undefined);
+  const { data, isLoading } = useGetAllSalesQuery({
+    page: pagination.current,
+    limit: pagination.pageSize,
+  });
 
   const handleSearch = (selectedKeys: string[], confirm: FilterDropdownProps["confirm"], dataIndex: string) => {
     confirm();
@@ -47,8 +53,12 @@ const SalesHistory: React.FC = () => {
     setSearchedColumn(dataIndex);
   };
 
-  const handleChange: OnChange = (_pagination, _filters, sorter) => {
+  const handleChange: OnChange = (tablePagination, _filters, sorter) => {
     setSortedInfo(sorter as Sorts);
+    setPagination({
+      current: tablePagination.current || 1,
+      pageSize: tablePagination.pageSize || 10,
+    });
   };
 
   const handleReset = (clearFilters: () => void) => {
@@ -217,6 +227,7 @@ const SalesHistory: React.FC = () => {
     if (data?.data) {
       onCategoryChange("weekly");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const hasSelected = selectedRowKeys.length > 0;
@@ -241,15 +252,18 @@ const SalesHistory: React.FC = () => {
           gap: "10px",
         }}
       >
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ fontSize: "16px", fontWeight: 600 }}>Sales History</span>
-          <span>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}</span>
+        <div>
+          <Title level={3} style={{ margin: 0 }}>
+            Sales History
+          </Title>
+          <Text type="secondary" style={{ fontSize: 13 }}>
+            Review past sales and download invoices. Filter by time period.
+          </Text>
+          <div style={{ marginTop: 8 }}>
+            <Text style={{ fontSize: 12 }}>
+              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+            </Text>
+          </div>
         </div>
         <div
           style={{
@@ -295,7 +309,12 @@ const SalesHistory: React.FC = () => {
       <Table
         rowSelection={rowSelection}
         loading={isLoading}
-        pagination={{ pageSize: 10, showSizeChanger: true }}
+        pagination={{
+          current: pagination.current,
+          pageSize: pagination.pageSize,
+          total: data?.meta?.total || 0,
+          showSizeChanger: true,
+        }}
         bordered
         rowKey={(record) => record._id}
         columns={columns}

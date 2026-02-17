@@ -13,7 +13,6 @@ router.post(
   EyeGlassControllers.createEyeGlass,
 );
 router.delete("/", auth(), EyeGlassControllers.deleteEyeGlassByIds);
-router.delete("/delete-all", auth(), EyeGlassControllers.deleteAllEyeGlasses);
 router.put(
   "/:eyeGlassId",
   auth(),

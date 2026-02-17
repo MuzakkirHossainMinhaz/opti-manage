@@ -19,6 +19,7 @@ import {
   TableColumnsType,
   TableProps,
   Tooltip,
+  Typography,
   theme,
 } from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
@@ -29,18 +30,14 @@ import { toast } from "sonner";
 import EyeGlassModal from "../../components/eyeGlass/EyeGlassModal";
 import FilterEyeGlassModal from "../../components/eyeGlass/FilterEyeGlassModal";
 import SellEyeGlassModal from "../../components/eyeGlass/SellEyeGlassModal";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
-import {
-  useDeleteAllEyeGlassesMutation,
-  useDeleteEyeGlassMutation,
-  useGetAllEyeGlassesQuery,
-} from "../../redux/features/eyeGlass/eyeGlassApi";
+import { useDeleteEyeGlassMutation, useGetAllEyeGlassesQuery } from "../../redux/features/eyeGlass/eyeGlassApi";
 import { useCreateSalesMutation } from "../../redux/features/sales/salesApi";
-import { useAppSelector } from "../../redux/hooks";
 
 type OnChange = NonNullable<TableProps<any>["onChange"]>;
 type GetSingle<T> = T extends (infer U)[] ? U : never;
 type Sorts = GetSingle<Parameters<OnChange>[2]>;
+
+const { Title, Text } = Typography;
 
 const EyeGlasses: React.FC = () => {
   const {
@@ -48,7 +45,6 @@ const EyeGlasses: React.FC = () => {
   } = theme.useToken();
   const [selectedRowKeys, setSelectedRowKeys] = useState<React.Key[]>([]);
   const [deleteEyeGlass, { isLoading: isDeleting }] = useDeleteEyeGlassMutation();
-  const [deleteAllEyeGlasses, { isLoading: isDeletingAll }] = useDeleteAllEyeGlassesMutation();
   const [filters, setFilters] = useState({});
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [searchText, setSearchText] = useState("");
@@ -56,7 +52,6 @@ const EyeGlasses: React.FC = () => {
   const searchInput = useRef<InputRef>(null);
   const [sortedInfo, setSortedInfo] = useState<Sorts>({});
   const [isSellModalOpen, setIsSellModalOpen] = useState(false);
-  const user = useAppSelector(selectCurrentUser);
   const [productId, setProductId] = useState("");
   const [date, setDate] = useState("");
   const [createSales, { isLoading: isSalesCreating }] = useCreateSalesMutation();
@@ -202,26 +197,6 @@ const EyeGlasses: React.FC = () => {
     } catch (error) {
       toast.error("Failed to delete.", { id: toastId });
       return;
-    }
-  };
-
-  // all / bulk delete handler
-  const handleAllDelete = async () => {
-    if (user?.role !== "manager") {
-      toast.error("Only managers can delete all products at once.");
-      return;
-    }
-
-    const toastId = toast.loading("Deleting all items...");
-
-    try {
-      await deleteAllEyeGlasses(undefined);
-      toast.success("Successfully Deleted.", {
-        id: toastId,
-        duration: 2000,
-      });
-    } catch (error) {
-      toast.error("Failed to delete.", { id: toastId });
     }
   };
 
@@ -395,24 +370,35 @@ const EyeGlasses: React.FC = () => {
           gap: "10px",
         }}
       >
+        <div>
+          <Title level={3} style={{ margin: 0 }}>
+            Eye Glass Inventory
+          </Title>
+          <Text type="secondary" style={{ fontSize: 13 }}>
+            Manage stock, create variants, and sell eye glasses.
+          </Text>
+          <div style={{ marginTop: 8 }}>
+            <Text style={{ fontSize: 12 }}>
+              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
+            </Text>
+          </div>
+        </div>
         <div
           style={{
             display: "flex",
-            gap: "16px",
+            gap: "12px",
             alignItems: "center",
+            flexWrap: "wrap",
+            justifyContent: "flex-end",
           }}
         >
-          {user?.role === "manager" && (
-            <Button
-              danger
-              type="primary"
-              onClick={handleAllDelete}
-              icon={<DeleteOutlined />}
-              loading={isLoading || isDeletingAll}
-            >
-              Bulk Delete
-            </Button>
-          )}
+          <div style={{ fontSize: 13 }}>Total items: {data?.meta?.total}</div>
+          <Button type="default" icon={<FilterOutlined />} iconPosition="start" onClick={showModal}>
+            Filter
+          </Button>
+          <Button type="primary" onClick={showAddModal} icon={<PlusCircleOutlined />} loading={isLoading}>
+            Add Item
+          </Button>
           <Button
             danger
             onClick={handleDelete}
@@ -421,24 +407,6 @@ const EyeGlasses: React.FC = () => {
             loading={isLoading || isDeleting}
           >
             Delete
-          </Button>
-          <span>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}</span>
-        </div>
-        <div
-          style={{
-            display: "flex",
-            gap: "16px",
-            alignItems: "center",
-          }}
-        >
-          <div>
-            <p>Total items: {data?.meta?.total}</p>
-          </div>
-          <Button type="default" icon={<FilterOutlined />} iconPosition="start" onClick={showModal}>
-            Filter
-          </Button>
-          <Button type="primary" onClick={showAddModal} icon={<PlusCircleOutlined />} loading={isLoading}>
-            Add Item
           </Button>
         </div>
       </div>

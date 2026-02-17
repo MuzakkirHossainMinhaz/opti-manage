@@ -61,38 +61,6 @@ const deleteEyeGlassByIds = async (userData: any, eyeGlassIds: string[]) => {
   return eyeGlasses;
 };
 
-const deleteAllEyeGlasses = async (userData: any) => {
-  let eyeGlasses;
-  let sales;
-
-  if (userData.role === "manager") {
-    eyeGlasses = await EyeGlassModel.deleteMany({});
-    sales = await SalesModel.deleteMany({});
-
-    await ActivityLogServices.createActivityLog(
-      { _id: userData._id, username: userData.username, role: userData.role },
-      "DELETE",
-      "All eye glasses and sales deleted by manager",
-    );
-  } else {
-    eyeGlasses = await EyeGlassModel.deleteMany({
-      createdBy: userData._id,
-    });
-
-    sales = await SalesModel.deleteMany({
-      sellerId: userData._id,
-    });
-
-    await ActivityLogServices.createActivityLog(
-      { _id: userData._id, username: userData.username, role: userData.role },
-      "DELETE",
-      `All eye glasses and sales deleted by user ${userData.username}`,
-    );
-  }
-
-  return [eyeGlasses, sales];
-};
-
 const updateEyeGlassById = async (eyeGlassId: string, userData: any, payload: Partial<IEyeGlass>) => {
   let eyeGlass;
   if (userData.role === "user") {
@@ -138,7 +106,6 @@ const getEyeGlassById = async (eyeGlassId: string) => {
 export const EyeGlassServices = {
   createEyeGlass,
   deleteEyeGlassByIds,
-  deleteAllEyeGlasses,
   updateEyeGlassById,
   getAllEyeGlasses,
   getEyeGlassById,

@@ -1,4 +1,4 @@
-import { Modal } from "antd";
+import { Button, Modal } from "antd";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import Form from "../form/Form";
@@ -11,7 +11,7 @@ interface CreateUserModalProps {
 }
 
 const CreateUserModal = ({ open, onClose }: CreateUserModalProps) => {
-  const [registerUser] = useRegisterMutation();
+  const [registerUser, { isLoading }] = useRegisterMutation();
 
   const handleSubmit = async (data: FieldValues) => {
     const toastId = toast.loading("Creating user...");
@@ -46,9 +46,25 @@ const CreateUserModal = ({ open, onClose }: CreateUserModalProps) => {
       open={open}
       onCancel={onClose}
       footer={null}
-      title="Add New User"
+      title={
+        <p
+          className="my-font"
+          style={{
+            fontSize: "18px",
+            fontWeight: 600,
+            paddingBottom: "12px",
+            borderBottom: "2px solid #e5e5e5",
+            color: "#1f1f1f",
+            margin: 0,
+          }}
+        >
+          Add New User
+        </p>
+      }
       destroyOnClose
       centered
+      maskClosable={false}
+      width={600}
     >
       <Form onSubmit={handleSubmit}>
         <div
@@ -63,22 +79,20 @@ const CreateUserModal = ({ open, onClose }: CreateUserModalProps) => {
           <MyInput required type="email" name="email" label="Email" placeholder="Enter email" />
           <MyInput required type="password" name="password" label="Password" placeholder="Create a password" />
 
-          <button
-            type="submit"
+          <Button
+            className="my-font"
+            type="primary"
+            htmlType="submit"
+            loading={isLoading}
             style={{
-              marginTop: "10px",
-              width: "100%",
-              padding: "10px 16px",
-              borderRadius: 8,
-              border: "none",
-              background: "#1677ff",
-              color: "#fff",
+              fontSize: "15px",
               fontWeight: 600,
-              cursor: "pointer",
+              height: "37px",
+              marginTop: "6px",
             }}
           >
             Create User
-          </button>
+          </Button>
         </div>
       </Form>
     </Modal>
@@ -86,4 +100,3 @@ const CreateUserModal = ({ open, onClose }: CreateUserModalProps) => {
 };
 
 export default CreateUserModal;
-
