@@ -4,7 +4,7 @@ import sendResponse from "../../utils/sendResponse";
 import { SalesServices } from "./sales.services";
 
 const createSale = catchAsync(async (req, res) => {
-  const sale = await SalesServices.createSale(req.body);
+  const sale = await SalesServices.createSale(req.user, req.body);
 
   sendResponse(res, {
     success: true,
@@ -27,7 +27,7 @@ const getAllSales = catchAsync(async (req, res) => {
 
 const getSalesById = catchAsync(async (req, res) => {
   const id = req.params.id as string;
-  const sale = await SalesServices.getSalesById(id);
+  const sale = await SalesServices.getSalesById(req.user, id);
 
   sendResponse(res, {
     success: true,

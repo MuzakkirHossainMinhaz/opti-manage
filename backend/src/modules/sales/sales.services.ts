@@ -4,7 +4,7 @@ import { EyeGlassModel } from "../eyeGlass/eyeGlass.model";
 import { ISales } from "./sales.interface";
 import { SalesModel } from "./sales.model";
 
-const createSale = async (payload: ISales) => {
+const createSale = async (userData: JwtPayload, payload: Omit<ISales, "sellerId">) => {
   const eyeGlass = await EyeGlassModel.findById(payload.productId);
 
   if (!eyeGlass) {
@@ -16,7 +16,10 @@ const createSale = async (payload: ISales) => {
     throw new AppError(400, "Insufficient quantity");
   }
 
-  const sale = await SalesModel.create(payload);
+  const sale = await SalesModel.create({
+    ...payload,
+    sellerId: userData._id as any,
+  });
   if (!sale) {
     throw new AppError(500, "Failed to create sale");
   }
@@ -41,11 +44,16 @@ const getAllSales = async (userData: JwtPayload) => {
   return sales;
 };
 
-const getSalesById = async (id: string) => {
+const getSalesById = async (userData: JwtPayload, id: string) => {
   const sale = await SalesModel.findById(id).populate("sellerId", "name email").populate("productId", "name price");
   if (!sale) {
     throw new AppError(404, "Sale not found");
   }
+
+  if (userData.role === "user" && sale.sellerId && sale.sellerId._id.toString() !== userData._id.toString()) {
+    throw new AppError(403, "You do not have permission to view this sale");
+  }
+
   return sale;
 };
 

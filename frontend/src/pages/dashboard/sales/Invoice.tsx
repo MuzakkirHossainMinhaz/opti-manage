@@ -1,6 +1,6 @@
 import { ArrowLeftOutlined } from "@ant-design/icons";
 import { PDFViewer } from "@react-pdf/renderer";
-import { Button, Spin, theme } from "antd";
+import { Alert, Button, Spin, theme } from "antd";
 import { useNavigate, useParams } from "react-router-dom";
 import { useGetSaleByIdQuery } from "../../../redux/features/sales/salesApi";
 import InvoiceDocument from "./InvoiceDocument";
@@ -8,7 +8,7 @@ import InvoiceDocument from "./InvoiceDocument";
 const InvoicePage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { data: saleData, isLoading } = useGetSaleByIdQuery(id);
+  const { data: saleData, isLoading, isError, error } = useGetSaleByIdQuery(id);
   const {
     token: { colorBgContainer, borderRadiusLG },
   } = theme.useToken();
@@ -30,6 +30,20 @@ const InvoicePage = () => {
         <Button icon={<ArrowLeftOutlined />} onClick={() => navigate(-1)} shape="circle" />
         <span style={{ fontSize: "18px", fontWeight: 600 }}>Invoice Preview</span>
       </div>
+
+      {isError && (
+        <Alert
+          type="error"
+          showIcon
+          message="Unable to load invoice"
+          description={
+            (error as any)?.data?.message === "You do not have permission to view this sale"
+              ? "You are not allowed to view this invoice."
+              : (error as any)?.data?.message || "Something went wrong while loading the invoice."
+          }
+          style={{ marginBottom: 16 }}
+        />
+      )}
 
       {isLoading ? (
         <div style={{ flex: 1, display: "flex", justifyContent: "center", alignItems: "center" }}>

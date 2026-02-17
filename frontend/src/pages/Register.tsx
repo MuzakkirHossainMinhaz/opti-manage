@@ -98,9 +98,9 @@ const Register = () => {
                     gap: "16px",
                   }}
                 >
-                  <MyInput type="text" name="username" label="Username" placeholder="Choose a username" />
-                  <MyInput type="email" name="email" label="Email" placeholder="Enter your email" />
-                  <MyInput type="password" name="password" label="Password" placeholder="Create a password" />
+                  <MyInput required type="text" name="username" label="Username" placeholder="Choose a username" />
+                  <MyInput required type="email" name="email" label="Email" placeholder="Enter your email" />
+                  <MyInput required type="password" name="password" label="Password" placeholder="Create a password" />
 
                   <Button
                     type="primary"

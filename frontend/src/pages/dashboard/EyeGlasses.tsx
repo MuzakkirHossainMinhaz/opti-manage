@@ -94,7 +94,6 @@ const EyeGlasses: React.FC = () => {
       productId,
       ...data,
       saleDate: date,
-      sellerId: user?._id,
     };
 
     if (data.quantity > quantity) {
@@ -208,6 +207,11 @@ const EyeGlasses: React.FC = () => {
 
   // all / bulk delete handler
   const handleAllDelete = async () => {
+    if (user?.role !== "manager") {
+      toast.error("Only managers can delete all products at once.");
+      return;
+    }
+
     const toastId = toast.loading("Deleting all items...");
 
     try {
@@ -398,15 +402,17 @@ const EyeGlasses: React.FC = () => {
             alignItems: "center",
           }}
         >
-          <Button
-            danger
-            type="primary"
-            onClick={handleAllDelete}
-            icon={<DeleteOutlined />}
-            loading={isLoading || isDeletingAll}
-          >
-            Bulk Delete
-          </Button>
+          {user?.role === "manager" && (
+            <Button
+              danger
+              type="primary"
+              onClick={handleAllDelete}
+              icon={<DeleteOutlined />}
+              loading={isLoading || isDeletingAll}
+            >
+              Bulk Delete
+            </Button>
+          )}
           <Button
             danger
             onClick={handleDelete}

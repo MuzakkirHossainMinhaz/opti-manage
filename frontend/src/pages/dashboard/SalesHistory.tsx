@@ -215,7 +215,7 @@ const SalesHistory: React.FC = () => {
 
   useEffect(() => {
     if (data?.data) {
-      onCategoryChange("weekly"); // Set the default category to "weekly"
+      onCategoryChange("weekly");
     }
   }, [data]);
 

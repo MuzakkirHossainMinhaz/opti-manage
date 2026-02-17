@@ -42,13 +42,21 @@ const deleteEyeGlassByIds = async (userData: any, eyeGlassIds: string[]) => {
 };
 
 const deleteAllEyeGlasses = async (userData: any) => {
-  const eyeGlasses = await EyeGlassModel.deleteMany({
-    createdBy: userData._id,
-  });
+  let eyeGlasses;
+  let sales;
 
-  const sales = await SalesModel.deleteMany({
-    sellerId: userData._id,
-  });
+  if (userData.role === "manager") {
+    eyeGlasses = await EyeGlassModel.deleteMany({});
+    sales = await SalesModel.deleteMany({});
+  } else {
+    eyeGlasses = await EyeGlassModel.deleteMany({
+      createdBy: userData._id,
+    });
+
+    sales = await SalesModel.deleteMany({
+      sellerId: userData._id,
+    });
+  }
 
   return [eyeGlasses, sales];
 };

@@ -106,8 +106,8 @@ const Login = () => {
                     gap: "16px",
                   }}
                 >
-                  <MyInput type="text" name="username" label="Username" placeholder="Enter your username" />
-                  <MyInput type="password" name="password" label="Password" placeholder="Enter your password" />
+                  <MyInput required type="text" name="username" label="Username" placeholder="Enter your username" />
+                  <MyInput required type="password" name="password" label="Password" placeholder="Enter your password" />
 
                   <Button
                     type="primary"
@@ -149,7 +149,7 @@ const Login = () => {
                   >
                     <Text strong>Manager:</Text>
                     <span>
-                      User: <Text code>minhaz.amj</Text> Pass: <Text code>Minh@z10</Text>
+                      User: <Text code>Manager</Text> Pass: <Text code>Manager@2026</Text>
                     </span>
                   </div>
                   <div
