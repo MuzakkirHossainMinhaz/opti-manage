@@ -86,10 +86,25 @@ const getEyeGlassById = catchAsync(async (req, res) => {
   });
 });
 
+const reassignEyeGlassOwner = catchAsync(async (req, res) => {
+  const eyeGlassId = req.params.eyeGlassId as string;
+  const { newOwnerId } = req.body as { newOwnerId: string };
+
+  const eyeGlass = await EyeGlassServices.reassignEyeGlassOwner(eyeGlassId, req.user, newOwnerId);
+
+  sendResponse(res, {
+    success: true,
+    statusCode: httpStatus.OK,
+    message: "Eye Glass ownership reassigned successfully",
+    data: eyeGlass,
+  });
+});
+
 export const EyeGlassControllers = {
   createEyeGlass,
   deleteEyeGlassByIds,
   updateEyeGlassById,
   getAllEyeGlasses,
   getEyeGlassById,
+  reassignEyeGlassOwner,
 };

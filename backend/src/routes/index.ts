@@ -4,6 +4,7 @@ import { EyeGlassRoutes } from "../modules/eyeGlass/eyeGlass.route";
 import { SalesRoutes } from "../modules/sales/sales.route";
 import { UserRoutes } from "../modules/user/user.route";
 import { ActivityLogRoutes } from "../modules/activityLog/activityLog.route";
+import { OwnershipRequestRoutes } from "../modules/ownershipRequest/ownershipRequest.route";
 
 const router = Router();
 
@@ -12,5 +13,6 @@ router.use("/auth", UserRoutes);
 router.use("/eye-glasses", EyeGlassRoutes);
 router.use("/sales", SalesRoutes);
 router.use("/activity-logs", ActivityLogRoutes);
+router.use("/ownership-requests", OwnershipRequestRoutes);
 
 export default router;

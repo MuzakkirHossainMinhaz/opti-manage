@@ -43,6 +43,14 @@ const eyeGlassApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ["EyeGlasses", "EyeGlass"],
     }),
+    reassignEyeGlassOwner: builder.mutation({
+      query: ({ eyeGlassId, newOwnerId }: { eyeGlassId: string; newOwnerId: string }) => ({
+        url: `/eye-glasses/${eyeGlassId}/assign`,
+        method: "PATCH",
+        body: { newOwnerId },
+      }),
+      invalidatesTags: ["EyeGlasses", "EyeGlass"],
+    }),
   }),
 });
 
@@ -52,4 +60,5 @@ export const {
   useCreateEyeGlassMutation,
   useDeleteEyeGlassMutation,
   useUpdateEyeGlassMutation,
+  useReassignEyeGlassOwnerMutation,
 } = eyeGlassApi;

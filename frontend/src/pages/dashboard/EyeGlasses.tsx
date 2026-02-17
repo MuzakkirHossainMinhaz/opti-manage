@@ -8,20 +8,7 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import {
-  Button,
-  DatePickerProps,
-  Input,
-  InputRef,
-  Space,
-  Table,
-  TableColumnType,
-  TableColumnsType,
-  TableProps,
-  Tooltip,
-  Typography,
-  theme,
-} from "antd";
+import { Button, DatePickerProps, Input, InputRef, Modal, Select, Space, Table, TableColumnType, TableColumnsType, TableProps, Tooltip, Typography, theme } from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
@@ -30,8 +17,12 @@ import { toast } from "sonner";
 import EyeGlassModal from "../../components/eyeGlass/EyeGlassModal";
 import FilterEyeGlassModal from "../../components/eyeGlass/FilterEyeGlassModal";
 import SellEyeGlassModal from "../../components/eyeGlass/SellEyeGlassModal";
-import { useDeleteEyeGlassMutation, useGetAllEyeGlassesQuery } from "../../redux/features/eyeGlass/eyeGlassApi";
+import { useDeleteEyeGlassMutation, useGetAllEyeGlassesQuery, useReassignEyeGlassOwnerMutation } from "../../redux/features/eyeGlass/eyeGlassApi";
 import { useCreateSalesMutation } from "../../redux/features/sales/salesApi";
+import { useGetUsersQuery } from "../../redux/features/user/userApi";
+import { useCreateOwnershipRequestMutation } from "../../redux/features/ownershipRequest/ownershipRequestApi";
+import { selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppSelector } from "../../redux/hooks";
 
 type OnChange = NonNullable<TableProps<any>["onChange"]>;
 type GetSingle<T> = T extends (infer U)[] ? U : never;
@@ -61,6 +52,15 @@ const EyeGlasses: React.FC = () => {
   const [isEyeGlassModalOpen, setIsEyeGlassModalOpen] = useState(false);
   const [eyeGlassModalMode, setEyeGlassModalMode] = useState<"add" | "update" | "duplicate">("add");
   const [selectedEyeGlass, setSelectedEyeGlass] = useState<any>(null);
+  const [isReassignModalOpen, setIsReassignModalOpen] = useState(false);
+  const [eyeGlassForReassign, setEyeGlassForReassign] = useState<any | null>(null);
+  const [newOwnerId, setNewOwnerId] = useState<string | undefined>(undefined);
+  const [createOwnershipRequest, { isLoading: isRequestCreating }] = useCreateOwnershipRequestMutation();
+  const [reassignEyeGlassOwner, { isLoading: isReassigning }] = useReassignEyeGlassOwnerMutation();
+  const { data: usersData, isLoading: isUsersLoading } = useGetUsersQuery(undefined, {
+    refetchOnMountOrArgChange: false,
+  } as any);
+  const user = useAppSelector(selectCurrentUser);
 
   // eye-glass modal handlers
   const showAddModal = () => {
@@ -177,6 +177,44 @@ const EyeGlasses: React.FC = () => {
   const rowSelection = {
     selectedRowKeys,
     onChange: onSelectChange,
+  };
+
+  const handleRequestAccess = async (eyeGlassId: string) => {
+    const toastId = toast.loading("Requesting access...");
+
+    try {
+      await createOwnershipRequest({ eyeGlassId }).unwrap();
+      toast.success("Access request sent to owner and manager.", { id: toastId });
+    } catch (error: any) {
+      const message = error?.data?.message || "Failed to request access.";
+      toast.error(message, { id: toastId });
+    }
+  };
+
+  const openReassignModal = (record: any) => {
+    setEyeGlassForReassign(record);
+    setNewOwnerId(undefined);
+    setIsReassignModalOpen(true);
+  };
+
+  const handleReassignConfirm = async () => {
+    if (!eyeGlassForReassign || !newOwnerId) {
+      toast.error("Please select a new owner.");
+      return;
+    }
+
+    const toastId = toast.loading("Reassigning ownership...");
+
+    try {
+      await reassignEyeGlassOwner({ eyeGlassId: eyeGlassForReassign._id, newOwnerId }).unwrap();
+      toast.success("Ownership reassigned successfully.", { id: toastId });
+      setIsReassignModalOpen(false);
+      setEyeGlassForReassign(null);
+      setNewOwnerId(undefined);
+    } catch (error: any) {
+      const message = error?.data?.message || "Failed to reassign ownership.";
+      toast.error(message, { id: toastId });
+    }
   };
 
   // product delete handler
@@ -343,6 +381,16 @@ const EyeGlasses: React.FC = () => {
               onClick={() => showIsSellModal(record._id, record.quantity)}
             />
           </Tooltip>
+          {user?.role === "user" && record.createdBy && record.createdBy !== user._id && (
+            <Button size="small" onClick={() => handleRequestAccess(record._id)} loading={isRequestCreating}>
+              Request Access
+            </Button>
+          )}
+          {user?.role === "manager" && (
+            <Button size="small" type="link" onClick={() => openReassignModal(record)}>
+              Reassign
+            </Button>
+          )}
         </div>
       ),
     },
@@ -448,6 +496,39 @@ const EyeGlasses: React.FC = () => {
         initialData={selectedEyeGlass}
         eyeGlassId={selectedEyeGlass?._id}
       />
+      <Modal
+        open={isReassignModalOpen}
+        onCancel={() => setIsReassignModalOpen(false)}
+        onOk={handleReassignConfirm}
+        confirmLoading={isReassigning}
+        title="Reassign Ownership"
+        okText="Reassign"
+        okButtonProps={{ disabled: !newOwnerId }}
+        destroyOnClose
+        maskClosable={false}
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
+          <div>
+            <Text style={{ fontWeight: 600 }}>Eye Glass:</Text>{" "}
+            <Text>{eyeGlassForReassign?.name || "N/A"}</Text>
+          </div>
+          <Select
+            placeholder="Select new owner"
+            loading={isUsersLoading}
+            value={newOwnerId}
+            onChange={(value) => setNewOwnerId(value)}
+            style={{ width: "100%" }}
+            options={
+              usersData?.data
+                ?.filter((u: any) => u._id !== eyeGlassForReassign?.createdBy)
+                .map((u: any) => ({
+                  label: `${u.username} (${u.role})`,
+                  value: u._id,
+                })) || []
+            }
+          />
+        </div>
+      </Modal>
     </div>
   );
 };

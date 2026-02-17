@@ -84,14 +84,33 @@ const updateEyeGlassById = async (eyeGlassId: string, userData: any, payload: Pa
   return eyeGlass;
 };
 
-const getAllEyeGlasses = async (userData: any, queryParams: IQuery) => {
-  if (userData.role === "user") {
-    queryParams.createdBy = userData._id;
-  }
-
+const getAllEyeGlasses = async (_userData: any, queryParams: IQuery) => {
   const { eyeGlasses, total } = await queryBuilder(queryParams, EyeGlassModel);
 
   return { eyeGlasses, total };
+};
+
+const reassignEyeGlassOwner = async (eyeGlassId: string, managerData: any, newOwnerId: string) => {
+  if (managerData.role !== "manager") {
+    throw new AppError(403, "Only managers can reassign ownership");
+  }
+
+  const eyeGlass = await EyeGlassModel.findById(eyeGlassId);
+
+  if (!eyeGlass) {
+    throw new AppError(404, "Eye Glass not found");
+  }
+
+  eyeGlass.createdBy = newOwnerId as any;
+  await eyeGlass.save();
+
+  await ActivityLogServices.createActivityLog(
+    { _id: managerData._id, username: managerData.username, role: managerData.role },
+    "UPDATE",
+    `Ownership of eye glass ${eyeGlass._id.toString()} reassigned to user ${newOwnerId.toString()}`,
+  );
+
+  return eyeGlass;
 };
 
 const getEyeGlassById = async (eyeGlassId: string) => {
@@ -109,4 +128,5 @@ export const EyeGlassServices = {
   updateEyeGlassById,
   getAllEyeGlasses,
   getEyeGlassById,
+  reassignEyeGlassOwner,
 };
