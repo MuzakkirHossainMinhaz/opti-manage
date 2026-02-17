@@ -1,6 +1,7 @@
 import { createBrowserRouter } from "react-router-dom";
 import App from "../App";
 import Dashboard from "../pages/dashboard/Dashboard";
+import ActivityLog from "../pages/dashboard/ActivityLog";
 import EyeGlasses from "../pages/dashboard/EyeGlasses";
 import Invoice from "../pages/dashboard/sales/Invoice";
 import SalesHistory from "../pages/dashboard/SalesHistory";
@@ -27,6 +28,10 @@ const router = createBrowserRouter([
       {
         path: "sales-history",
         element: <SalesHistory />,
+      },
+      {
+        path: "activity-log",
+        element: <ActivityLog />,
       },
       {
         path: "invoice-download/:id",

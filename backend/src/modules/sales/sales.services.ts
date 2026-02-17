@@ -3,6 +3,7 @@ import AppError from "../../errors/AppError";
 import { EyeGlassModel } from "../eyeGlass/eyeGlass.model";
 import { ISales } from "./sales.interface";
 import { SalesModel } from "./sales.model";
+import { ActivityLogServices } from "../activityLog/activityLog.services";
 
 const createSale = async (userData: JwtPayload, payload: Omit<ISales, "sellerId">) => {
   const eyeGlass = await EyeGlassModel.findById(payload.productId);
@@ -30,6 +31,12 @@ const createSale = async (userData: JwtPayload, payload: Omit<ISales, "sellerId"
     eyeGlass.quantity = quantity;
     await eyeGlass.save();
   }
+
+  await ActivityLogServices.createActivityLog(
+    { _id: userData._id as any, username: userData.username as string, role: userData.role as string },
+    "CREATE",
+    `Sale ${sale._id.toString()} created for product ${payload.productId.toString()}`,
+  );
 
   return await SalesModel.findById(sale._id).populate("sellerId", "name email").populate("productId", "name price");
 };

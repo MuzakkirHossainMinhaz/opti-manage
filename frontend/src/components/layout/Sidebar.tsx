@@ -3,8 +3,8 @@ import { Button, ConfigProvider, Layout, Menu, theme } from "antd";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import logo from "../../assets/logo.png";
-import { logout } from "../../redux/features/auth/authSlice";
-import { useAppDispatch } from "../../redux/hooks";
+import { logout, selectCurrentUser } from "../../redux/features/auth/authSlice";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
 
 const { Sider } = Layout;
 
@@ -16,6 +16,7 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isLogoutHovered, setIsLogoutHovered] = useState(false);
+  const user = useAppSelector(selectCurrentUser);
 
   const handleLogout = () => {
     dispatch(logout());
@@ -37,6 +38,15 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
       icon: <HistoryOutlined />,
       label: "Sales History",
     },
+    ...(user?.role === "manager"
+      ? [
+          {
+            key: "/activity-log",
+            icon: <HistoryOutlined />,
+            label: "Activity Log",
+          },
+        ]
+      : []),
   ];
 
   const getSelectedKey = () => {

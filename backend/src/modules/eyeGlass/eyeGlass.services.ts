@@ -4,10 +4,18 @@ import { IQuery } from "../../interfaces";
 import { SalesModel } from "../sales/sales.model";
 import { IEyeGlass } from "./eyeGlass.interface";
 import { EyeGlassModel } from "./eyeGlass.model";
+import { ActivityLogServices } from "../activityLog/activityLog.services";
 
 const createEyeGlass = async (userData: any, payload: IEyeGlass) => {
   payload.createdBy = userData._id;
   const eyeGlass = await EyeGlassModel.create(payload);
+
+  await ActivityLogServices.createActivityLog(
+    { _id: userData._id, username: userData.username, role: userData.role },
+    "CREATE",
+    `EyeGlass ${eyeGlass._id.toString()} created by ${userData.username}`,
+  );
+
   return eyeGlass;
 };
 
@@ -28,12 +36,24 @@ const deleteEyeGlassByIds = async (userData: any, eyeGlassIds: string[]) => {
       if (eyeGlass) {
         eyeGlasses.push(eyeGlass);
         await SalesModel.deleteMany({ eyeGlassId: eyeGlass._id });
+
+        await ActivityLogServices.createActivityLog(
+          { _id: userData._id, username: userData.username, role: userData.role },
+          "DELETE",
+          `EyeGlass ${eyeGlass._id.toString()} deleted by ${userData.username}`,
+        );
       }
     } else {
       const eyeGlass = await EyeGlassModel.findByIdAndDelete(eyeGlassId);
       if (eyeGlass) {
         eyeGlasses.push(eyeGlass);
         await SalesModel.deleteMany({ eyeGlassId: eyeGlass._id });
+
+        await ActivityLogServices.createActivityLog(
+          { _id: userData._id, username: userData.username, role: userData.role },
+          "DELETE",
+          `EyeGlass ${eyeGlass._id.toString()} deleted by ${userData.username}`,
+        );
       }
     }
   }
@@ -48,6 +68,12 @@ const deleteAllEyeGlasses = async (userData: any) => {
   if (userData.role === "manager") {
     eyeGlasses = await EyeGlassModel.deleteMany({});
     sales = await SalesModel.deleteMany({});
+
+    await ActivityLogServices.createActivityLog(
+      { _id: userData._id, username: userData.username, role: userData.role },
+      "DELETE",
+      "All eye glasses and sales deleted by manager",
+    );
   } else {
     eyeGlasses = await EyeGlassModel.deleteMany({
       createdBy: userData._id,
@@ -56,6 +82,12 @@ const deleteAllEyeGlasses = async (userData: any) => {
     sales = await SalesModel.deleteMany({
       sellerId: userData._id,
     });
+
+    await ActivityLogServices.createActivityLog(
+      { _id: userData._id, username: userData.username, role: userData.role },
+      "DELETE",
+      `All eye glasses and sales deleted by user ${userData.username}`,
+    );
   }
 
   return [eyeGlasses, sales];
@@ -74,6 +106,12 @@ const updateEyeGlassById = async (eyeGlassId: string, userData: any, payload: Pa
   if (!eyeGlass) {
     throw new AppError(400, "Eye Glass not found or you do not have permission to update it.");
   }
+
+  await ActivityLogServices.createActivityLog(
+    { _id: userData._id, username: userData.username, role: userData.role },
+    "UPDATE",
+    `EyeGlass ${eyeGlass._id.toString()} updated by ${userData.username}`,
+  );
 
   return eyeGlass;
 };

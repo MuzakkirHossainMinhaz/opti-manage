@@ -3,9 +3,9 @@ import AppError from "../../errors/AppError";
 import { UserModel } from "../user/user.model";
 import { IAuth, IJWTPayload } from "./auth.interface";
 import { createJWT } from "./auth.utils";
+import { ActivityLogServices } from "../activityLog/activityLog.services";
 
 const loginUser = async (payload: IAuth) => {
-  // check if the user exists
   const user = await UserModel.findOne({ username: payload.username }).select("+password -createdAt -updatedAt");
   if (!user) {
     throw new AppError(httpStatus.NOT_FOUND, "User not found");
@@ -23,6 +23,12 @@ const loginUser = async (payload: IAuth) => {
     username: user.username,
   };
   const token = createJWT(jwtPayload);
+
+  await ActivityLogServices.createActivityLog(
+    { _id: user._id, username: user.username, role: user.role },
+    "LOGIN",
+    `User ${user.username} logged in`,
+  );
 
   return { token };
 };
