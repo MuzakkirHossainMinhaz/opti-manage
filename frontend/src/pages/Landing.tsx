@@ -1,4 +1,10 @@
-import { BarChartOutlined, LoginOutlined, SafetyCertificateOutlined, TeamOutlined, ThunderboltOutlined } from "@ant-design/icons";
+import {
+  BarChartOutlined,
+  LoginOutlined,
+  SafetyCertificateOutlined,
+  TeamOutlined,
+  ThunderboltOutlined,
+} from "@ant-design/icons";
 import { Button, Card, Col, Grid, Layout, Row, Space, theme, Typography } from "antd";
 import { useNavigate } from "react-router-dom";
 import logo from "../../public/logo.png";
@@ -89,12 +95,14 @@ const Landing = () => {
           </Title>
         </div>
         <Space>
-          <Button onClick={() => navigate("/login")} style={{ fontWeight: 500, borderRadius: "20px" }}>
-            Log in
+          <Button
+            type="primary"
+            size="large"
+            onClick={() => navigate("/login")}
+            style={{ fontWeight: 500, borderRadius: "26px" }}
+          >
+            Sign In
           </Button>
-            <Button type="primary" size="large" onClick={() => navigate("/login")} style={{ fontWeight: 500, borderRadius: "26px" }}>
-              Sign In
-            </Button>
         </Space>
       </Header>
 
