@@ -1,4 +1,11 @@
-import { DashboardOutlined, EyeOutlined, HistoryOutlined, LogoutOutlined } from "@ant-design/icons";
+import {
+  AuditOutlined,
+  DashboardOutlined,
+  EyeOutlined,
+  HistoryOutlined,
+  LogoutOutlined,
+  TeamOutlined,
+} from "@ant-design/icons";
 import { Button, ConfigProvider, Layout, Menu, theme } from "antd";
 import { useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -42,12 +49,12 @@ const Sidebar = ({ collapsed }: { collapsed: boolean }) => {
       ? [
           {
             key: "/users",
-            icon: <HistoryOutlined />,
+            icon: <TeamOutlined />,
             label: "Users",
           },
           {
             key: "/activity-log",
-            icon: <HistoryOutlined />,
+            icon: <AuditOutlined />,
             label: "Activity Log",
           },
         ]
