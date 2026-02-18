@@ -107,7 +107,13 @@ const Login = () => {
                   }}
                 >
                   <MyInput required type="text" name="username" label="Username" placeholder="Enter your username" />
-                  <MyInput required type="password" name="password" label="Password" placeholder="Enter your password" />
+                  <MyInput
+                    required
+                    type="password"
+                    name="password"
+                    label="Password"
+                    placeholder="Enter your password"
+                  />
 
                   <Button
                     type="primary"
@@ -120,7 +126,6 @@ const Login = () => {
                   </Button>
                 </div>
               </Form>
-
             </Card>
 
             <Alert
@@ -144,18 +149,6 @@ const Login = () => {
                     <Text strong>Manager:</Text>
                     <span>
                       User: <Text code>Manager</Text> Pass: <Text code>Manager@2026</Text>
-                    </span>
-                  </div>
-                  <div
-                    style={{
-                      display: "flex",
-                      justifyContent: "space-between",
-                      fontSize: "13px",
-                    }}
-                  >
-                    <Text strong>Staff:</Text>
-                    <span>
-                      User: <Text code>test.user1</Text> Pass: <Text code>Test@user1</Text>
                     </span>
                   </div>
                 </div>

@@ -9,4 +9,3 @@ export interface IOwnershipRequest {
   status: TOwnershipRequestStatus;
   message?: string;
 }
-

@@ -78,7 +78,10 @@ const getUserDashboardStats = async (userData: JwtPayload) => {
       .limit(10)
       .populate("productId", "name price")
       .lean(),
-    EyeGlassModel.find({ createdBy: userData._id as any }).sort({ createdAt: -1 }).limit(10).lean(),
+    EyeGlassModel.find({ createdBy: userData._id as any })
+      .sort({ createdAt: -1 })
+      .limit(10)
+      .lean(),
     SalesModel.aggregate([
       { $match: { sellerId: userData._id as any } },
       {
@@ -106,4 +109,3 @@ export const DashboardServices = {
   getManagerDashboardStats,
   getUserDashboardStats,
 };
-

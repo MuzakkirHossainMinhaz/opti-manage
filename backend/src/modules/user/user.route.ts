@@ -10,12 +10,7 @@ const router = Router();
 router.post("/register", auth("manager"), checkValidation(userValidationSchema), UserControllers.createUser);
 router.get("/users", auth("manager"), UserControllers.getAllUsers);
 router.delete("/users/:id", auth("manager"), UserControllers.deleteUser);
-router.patch(
-  "/:id/profile",
-  auth(),
-  checkValidation(updateProfileValidationSchema),
-  UserControllers.updateProfile,
-);
+router.patch("/:id/profile", auth(), checkValidation(updateProfileValidationSchema), UserControllers.updateProfile);
 router.patch(
   "/:id/change-password",
   auth(),

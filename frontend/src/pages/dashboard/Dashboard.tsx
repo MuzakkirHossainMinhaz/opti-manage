@@ -105,7 +105,7 @@ const DashboardHome = () => {
       {/* Top Statistics Cards */}
       <Row gutter={[16, 16]}>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}>
+          <Card style={{ borderRadius: borderRadiusLG }}>
             <Statistic
               title={isManager ? "Total Revenue" : "My Total Revenue"}
               value={totalRevenue}
@@ -117,7 +117,7 @@ const DashboardHome = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}>
+          <Card style={{ borderRadius: borderRadiusLG }}>
             <Statistic
               title={isManager ? "Total Sales" : "My Sales Today"}
               value={totalSalesCount}
@@ -127,7 +127,7 @@ const DashboardHome = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}>
+          <Card style={{ borderRadius: borderRadiusLG }}>
             <Statistic
               title={isManager ? "Total Products" : "My Recently Added Items"}
               value={totalProducts}
@@ -137,7 +137,7 @@ const DashboardHome = () => {
           </Card>
         </Col>
         <Col xs={24} sm={12} lg={6}>
-          <Card bordered={false} style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}>
+          <Card style={{ borderRadius: borderRadiusLG }}>
             <Statistic
               title={isManager ? "Inventory Value" : "My Revenue Today"}
               value={totalInventoryValue}
@@ -155,8 +155,7 @@ const DashboardHome = () => {
         <Col xs={24} lg={16}>
           <Card
             title={isManager ? "Revenue Trend" : "My Recent Revenue"}
-            bordered={false}
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG, height: "100%" }}
+            style={{ borderRadius: borderRadiusLG, height: "100%" }}
           >
             <div style={{ height: 300, width: "100%" }}>
               <ResponsiveContainer width="100%" height="100%">
@@ -174,11 +173,7 @@ const DashboardHome = () => {
         </Col>
         <Col xs={24} lg={8}>
           {isManager ? (
-            <Card
-              title="Top Performing Staff"
-              bordered={false}
-              style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG, height: "100%" }}
-            >
+            <Card title="Top Performing Staff" style={{ borderRadius: borderRadiusLG, height: "100%" }}>
               <div
                 style={{ height: 300, width: "100%", display: "flex", justifyContent: "center", alignItems: "center" }}
               >
@@ -208,11 +203,7 @@ const DashboardHome = () => {
               </div>
             </Card>
           ) : (
-            <Card
-              title="My Goals"
-              bordered={false}
-              style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG, height: "100%" }}
-            >
+            <Card title="My Goals" style={{ borderRadius: borderRadiusLG, height: "100%" }}>
               <div style={{ padding: 8, display: "flex", flexDirection: "column", gap: 8 }}>
                 <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                   <Text>Daily Sales Goal</Text>
@@ -239,11 +230,7 @@ const DashboardHome = () => {
       </Row>
 
       {/* Recent Sales / Items Table */}
-      <Card
-        title={isManager ? "Recent Sales" : "My Recent Sales"}
-        bordered={false}
-        style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}
-      >
+      <Card title={isManager ? "Recent Sales" : "My Recent Sales"} style={{ borderRadius: borderRadiusLG }}>
         <Table
           columns={columns}
           dataSource={stats.recentSales || []}
@@ -254,11 +241,7 @@ const DashboardHome = () => {
       </Card>
 
       {!isManager && (
-        <Card
-          title="My Recently Added Items"
-          bordered={false}
-          style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.06)", borderRadius: borderRadiusLG }}
-        >
+        <Card title="My Recently Added Items" style={{ borderRadius: borderRadiusLG }}>
           <Table
             columns={[
               { title: "Name", dataIndex: "name", key: "name" },

@@ -53,9 +53,7 @@ const getAllSales = async (userData: JwtPayload, query: any) => {
 
   const skip = limit > 0 ? (page - 1) * limit : 0;
 
-  let mongoQuery = SalesModel.find(filter)
-    .populate("sellerId", "name email")
-    .populate("productId", "name price");
+  let mongoQuery = SalesModel.find(filter).populate("sellerId", "name email").populate("productId", "name price");
 
   if (limit > 0) {
     mongoQuery = mongoQuery.skip(skip).limit(limit);

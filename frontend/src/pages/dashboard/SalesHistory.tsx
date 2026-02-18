@@ -260,9 +260,7 @@ const SalesHistory: React.FC = () => {
             Review past sales and download invoices. Filter by time period.
           </Text>
           <div style={{ marginTop: 8 }}>
-            <Text style={{ fontSize: 12 }}>
-              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-            </Text>
+            <Text style={{ fontSize: 12 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}</Text>
           </div>
         </div>
         <div
@@ -315,7 +313,6 @@ const SalesHistory: React.FC = () => {
           total: data?.meta?.total || 0,
           showSizeChanger: true,
         }}
-        bordered
         rowKey={(record) => record._id}
         columns={columns}
         dataSource={salesData}

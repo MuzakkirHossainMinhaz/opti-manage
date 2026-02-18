@@ -13,4 +13,3 @@ const activityLogApi = baseApi.injectEndpoints({
 });
 
 export const { useGetActivityLogsQuery } = activityLogApi;
-

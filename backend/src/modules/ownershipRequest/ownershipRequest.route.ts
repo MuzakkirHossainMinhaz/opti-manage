@@ -23,4 +23,3 @@ router.patch(
 );
 
 export const OwnershipRequestRoutes = router;
-

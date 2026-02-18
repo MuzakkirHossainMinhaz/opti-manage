@@ -7,4 +7,3 @@ const router = Router();
 router.get("/", auth(), DashboardControllers.getDashboardStats);
 
 export const DashboardRoutes = router;
-

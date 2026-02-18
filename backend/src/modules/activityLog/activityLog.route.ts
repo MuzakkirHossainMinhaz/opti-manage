@@ -7,4 +7,3 @@ const router = Router();
 router.get("/", auth(), ActivityLogControllers.getActivityLogs);
 
 export const ActivityLogRoutes = router;
-

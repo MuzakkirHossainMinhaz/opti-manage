@@ -33,4 +33,3 @@ export const {
   useGetOwnershipRequestsQuery,
   useUpdateOwnershipRequestStatusMutation,
 } = ownershipRequestApi;
-

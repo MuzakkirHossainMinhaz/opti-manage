@@ -21,9 +21,7 @@ const createActivityLog = async (userData: TActivityUser, action: TActivityActio
 };
 
 const getActivityLogs = async () => {
-  const logs = await ActivityLogModel.find()
-    .sort({ timestamp: -1 })
-    .populate("user", "username role");
+  const logs = await ActivityLogModel.find().sort({ timestamp: -1 }).populate("user", "username role");
 
   return logs;
 };

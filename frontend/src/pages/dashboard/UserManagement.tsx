@@ -41,8 +41,7 @@ const UserManagement = () => {
     isLoading: isOwnershipRequestsLoading,
     refetch: refetchOwnershipRequests,
   } = useGetOwnershipRequestsQuery(undefined);
-  const [updateOwnershipRequestStatus, { isLoading: isUpdatingRequest }] =
-    useUpdateOwnershipRequestStatusMutation();
+  const [updateOwnershipRequestStatus, { isLoading: isUpdatingRequest }] = useUpdateOwnershipRequestStatusMutation();
   const [isCreateUserOpen, setIsCreateUserOpen] = useState(false);
 
   if (!currentUser || currentUser.role !== "manager") {

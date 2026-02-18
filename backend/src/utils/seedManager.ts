@@ -20,4 +20,3 @@ export const seedManager = async () => {
     role: "manager",
   });
 };
-

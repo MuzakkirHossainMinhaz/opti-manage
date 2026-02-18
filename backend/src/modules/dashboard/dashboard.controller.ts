@@ -22,4 +22,3 @@ const getDashboardStats = catchAsync(async (req, res) => {
 export const DashboardControllers = {
   getDashboardStats,
 };
-

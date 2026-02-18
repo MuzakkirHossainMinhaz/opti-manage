@@ -8,4 +8,3 @@ export interface IActivityLog {
   user: Types.ObjectId;
   timestamp: Date;
 }
-

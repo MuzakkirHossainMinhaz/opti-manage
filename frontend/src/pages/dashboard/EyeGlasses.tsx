@@ -8,7 +8,22 @@ import {
   SearchOutlined,
   ShoppingCartOutlined,
 } from "@ant-design/icons";
-import { Button, DatePickerProps, Input, InputRef, Modal, Select, Space, Table, TableColumnType, TableColumnsType, TableProps, Tooltip, Typography, theme } from "antd";
+import {
+  Button,
+  DatePickerProps,
+  Input,
+  InputRef,
+  Modal,
+  Select,
+  Space,
+  Table,
+  TableColumnType,
+  TableColumnsType,
+  TableProps,
+  Tooltip,
+  Typography,
+  theme,
+} from "antd";
 import { FilterDropdownProps } from "antd/es/table/interface";
 import React, { useRef, useState } from "react";
 import Highlighter from "react-highlight-words";
@@ -17,11 +32,15 @@ import { toast } from "sonner";
 import EyeGlassModal from "../../components/eyeGlass/EyeGlassModal";
 import FilterEyeGlassModal from "../../components/eyeGlass/FilterEyeGlassModal";
 import SellEyeGlassModal from "../../components/eyeGlass/SellEyeGlassModal";
-import { useDeleteEyeGlassMutation, useGetAllEyeGlassesQuery, useReassignEyeGlassOwnerMutation } from "../../redux/features/eyeGlass/eyeGlassApi";
+import { selectCurrentUser } from "../../redux/features/auth/authSlice";
+import {
+  useDeleteEyeGlassMutation,
+  useGetAllEyeGlassesQuery,
+  useReassignEyeGlassOwnerMutation,
+} from "../../redux/features/eyeGlass/eyeGlassApi";
+import { useCreateOwnershipRequestMutation } from "../../redux/features/ownershipRequest/ownershipRequestApi";
 import { useCreateSalesMutation } from "../../redux/features/sales/salesApi";
 import { useGetUsersQuery } from "../../redux/features/user/userApi";
-import { useCreateOwnershipRequestMutation } from "../../redux/features/ownershipRequest/ownershipRequestApi";
-import { selectCurrentUser } from "../../redux/features/auth/authSlice";
 import { useAppSelector } from "../../redux/hooks";
 
 type OnChange = NonNullable<TableProps<any>["onChange"]>;
@@ -426,9 +445,7 @@ const EyeGlasses: React.FC = () => {
             Manage stock, create variants, and sell eye glasses.
           </Text>
           <div style={{ marginTop: 8 }}>
-            <Text style={{ fontSize: 12 }}>
-              {hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}
-            </Text>
+            <Text style={{ fontSize: 12 }}>{hasSelected ? `Selected ${selectedRowKeys.length} items` : ""}</Text>
           </div>
         </div>
         <div
@@ -463,7 +480,6 @@ const EyeGlasses: React.FC = () => {
       <Table
         rowSelection={rowSelection}
         loading={isLoading}
-        bordered
         rowKey={(record) => record._id}
         columns={columns}
         dataSource={data?.data || []}
@@ -509,8 +525,7 @@ const EyeGlasses: React.FC = () => {
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
           <div>
-            <Text style={{ fontWeight: 600 }}>Eye Glass:</Text>{" "}
-            <Text>{eyeGlassForReassign?.name || "N/A"}</Text>
+            <Text style={{ fontWeight: 600 }}>Eye Glass:</Text> <Text>{eyeGlassForReassign?.name || "N/A"}</Text>
           </div>
           <Select
             placeholder="Select new owner"

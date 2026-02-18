@@ -1,19 +1,18 @@
-import { Card, Col, Divider, Layout, Row, Typography, theme } from "antd";
+import { Button, Card, Col, Divider, Row, Typography, theme } from "antd";
 import { FieldValues } from "react-hook-form";
 import { toast } from "sonner";
 import Form from "../../components/form/Form";
 import MyInput from "../../components/form/Input";
 import { selectCurrentUser } from "../../redux/features/auth/authSlice";
-import { useUpdateProfileMutation, useChangePasswordMutation } from "../../redux/features/user/userApi";
+import { useChangePasswordMutation, useUpdateProfileMutation } from "../../redux/features/user/userApi";
 import { useAppSelector } from "../../redux/hooks";
 
-const { Content } = Layout;
 const { Title, Text } = Typography;
 
 const Profile = () => {
   const user = useAppSelector(selectCurrentUser);
   const {
-    token: { borderRadiusLG, colorTextHeading },
+    token: { borderRadiusLG, colorTextHeading, colorBgContainer },
   } = theme.useToken();
 
   const [updateProfile] = useUpdateProfileMutation();
@@ -87,145 +86,128 @@ const Profile = () => {
   };
 
   return (
-    <Layout style={{ minHeight: "100%" }}>
-      <Content
+    <div
+      style={{
+        padding: "20px",
+        background: colorBgContainer,
+        borderRadius: borderRadiusLG,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.06)",
+        border: "none",
+      }}
+    >
+      <div
         style={{
-          padding: "20px",
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
+          marginBottom: 24,
         }}
       >
-        <Row justify="center" align="top" style={{ width: "100%", maxWidth: "900px" }} gutter={[24, 24]}>
-          <Col xs={24} lg={12}>
-            <Card
-              bordered={false}
-              style={{
-                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-                borderRadius: borderRadiusLG,
-              }}
-            >
-              <Title level={3} style={{ marginBottom: 4, color: colorTextHeading }}>
-                Profile
-              </Title>
-              <Text type="secondary" style={{ fontSize: 13 }}>
-                Update your personal details. Only managers can change username and email.
-              </Text>
+        <Title level={3} style={{ margin: 0, color: colorTextHeading }}>
+          Profile
+        </Title>
+        <Text type="secondary" style={{ fontSize: 13 }}>
+          Manage your personal details and update your password.
+        </Text>
+      </div>
 
-              <Divider />
+      <Row justify="space-between" align="top" gutter={[24, 24]}>
+        <Col xs={24} lg={12}>
+          <Card
+            style={{
+              boxShadow: "0 4px 24px rgba(0,0,0,0.04)",
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Title level={4} style={{ marginBottom: 4, color: colorTextHeading }}>
+              Personal Details
+            </Title>
+            <Text type="secondary" style={{ fontSize: 13 }}>
+              Update your personal details. Only managers can change username and email.
+            </Text>
 
-              <Form onSubmit={handleProfileUpdate}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
-                  }}
-                >
-                  <MyInput type="text" name="fullName" label="Full Name" placeholder="Enter your full name" />
+            <Divider />
 
-                  {user.role === "manager" ? (
-                    <>
-                      <MyInput type="text" name="username" label="Username" placeholder={user.username} />
-                      <MyInput type="email" name="email" label="Email" placeholder="Enter email" />
-                    </>
-                  ) : (
-                    <>
-                      <div>
-                        <Text type="secondary" style={{ fontSize: 13 }}>
-                          Username
-                        </Text>
-                        <div style={{ fontWeight: 600 }}>{user.username}</div>
-                      </div>
-                    </>
-                  )}
+            <Form onSubmit={handleProfileUpdate}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                }}
+              >
+                <MyInput type="text" name="fullName" label="Full Name" placeholder="Enter your full name" />
 
-                  <button
-                    type="submit"
-                    style={{
-                      marginTop: "10px",
-                      width: "100%",
-                      padding: "10px 16px",
-                      borderRadius: 8,
-                      border: "none",
-                      background: "#1677ff",
-                      color: "#fff",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Save Changes
-                  </button>
-                </div>
-              </Form>
-            </Card>
-          </Col>
+                {user.role === "manager" ? (
+                  <>
+                    <MyInput type="text" name="username" label="Username" placeholder={user.username} />
+                    <MyInput type="email" name="email" label="Email" placeholder="Enter email" />
+                  </>
+                ) : (
+                  <>
+                    <div>
+                      <Text type="secondary" style={{ fontSize: 13 }}>
+                        Username
+                      </Text>
+                      <div style={{ fontWeight: 600 }}>{user.username}</div>
+                    </div>
+                  </>
+                )}
 
-          <Col xs={24} lg={12}>
-            <Card
-              bordered={false}
-              style={{
-                boxShadow: "0 4px 24px rgba(0,0,0,0.06)",
-                borderRadius: borderRadiusLG,
-              }}
-            >
-              <Title level={3} style={{ marginBottom: 4, color: colorTextHeading }}>
-                Change Password
-              </Title>
-              <Text type="secondary" style={{ fontSize: 13 }}>
-                Update your password. Make sure to use a strong one.
-              </Text>
+                <Button type="primary" htmlType="submit" block style={{ marginTop: "10px", fontWeight: 600 }}>
+                  Save Changes
+                </Button>
+              </div>
+            </Form>
+          </Card>
+        </Col>
 
-              <Divider />
+        <Col xs={24} lg={12}>
+          <Card
+            style={{
+              boxShadow: "0 4px 24px rgba(0,0,0,0.04)",
+              borderRadius: borderRadiusLG,
+            }}
+          >
+            <Title level={4} style={{ marginBottom: 4, color: colorTextHeading }}>
+              Change Password
+            </Title>
+            <Text type="secondary" style={{ fontSize: 13 }}>
+              Update your password. Make sure to use a strong one.
+            </Text>
 
-              <Form onSubmit={handlePasswordChange}>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "16px",
-                  }}
-                >
-                  <MyInput
-                    required
-                    type="password"
-                    name="currentPassword"
-                    label="Current Password"
-                    placeholder="Enter current password"
-                  />
-                  <MyInput
-                    required
-                    type="password"
-                    name="newPassword"
-                    label="New Password"
-                    placeholder="Enter new password"
-                  />
+            <Divider />
 
-                  <button
-                    type="submit"
-                    style={{
-                      marginTop: "10px",
-                      width: "100%",
-                      padding: "10px 16px",
-                      borderRadius: 8,
-                      border: "none",
-                      background: "#1677ff",
-                      color: "#fff",
-                      fontWeight: 600,
-                      cursor: "pointer",
-                    }}
-                  >
-                    Change Password
-                  </button>
-                </div>
-              </Form>
-            </Card>
-          </Col>
-        </Row>
-      </Content>
-    </Layout>
+            <Form onSubmit={handlePasswordChange}>
+              <div
+                style={{
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "16px",
+                }}
+              >
+                <MyInput
+                  required
+                  type="password"
+                  name="currentPassword"
+                  label="Current Password"
+                  placeholder="Enter current password"
+                />
+                <MyInput
+                  required
+                  type="password"
+                  name="newPassword"
+                  label="New Password"
+                  placeholder="Enter new password"
+                />
+
+                <Button type="primary" htmlType="submit" block style={{ marginTop: "10px", fontWeight: 600 }}>
+                  Change Password
+                </Button>
+              </div>
+            </Form>
+          </Card>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
 export default Profile;
-

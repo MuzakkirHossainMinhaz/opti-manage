@@ -33,8 +33,4 @@ const ownershipRequestSchema = new mongoose.Schema<IOwnershipRequest>(
   },
 );
 
-export const OwnershipRequestModel = mongoose.model<IOwnershipRequest>(
-  "OwnershipRequest",
-  ownershipRequestSchema,
-);
-
+export const OwnershipRequestModel = mongoose.model<IOwnershipRequest>("OwnershipRequest", ownershipRequestSchema);

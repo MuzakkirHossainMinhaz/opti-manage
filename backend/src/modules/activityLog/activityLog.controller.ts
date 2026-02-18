@@ -22,4 +22,3 @@ const getActivityLogs = catchAsync(async (req, res) => {
 export const ActivityLogControllers = {
   getActivityLogs,
 };
-

@@ -107,4 +107,3 @@ export const OwnershipRequestServices = {
   getOwnershipRequests,
   updateOwnershipRequestStatus,
 };
-
