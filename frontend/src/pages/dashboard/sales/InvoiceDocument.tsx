@@ -1,4 +1,5 @@
-import { Document, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import { Document, Image, Page, StyleSheet, Text, View } from "@react-pdf/renderer";
+import logo from "../../../assets/logo.png";
 
 const styles = StyleSheet.create({
   page: {
@@ -6,19 +7,41 @@ const styles = StyleSheet.create({
     fontFamily: "Helvetica",
     fontSize: 12,
     color: "#333",
+    backgroundColor: "#f4f7fb",
+  },
+  card: {
+    backgroundColor: "#ffffff",
+    borderRadius: 12,
+    padding: 24,
+    borderWidth: 1,
+    borderColor: "#e5e7eb",
   },
   header: {
     flexDirection: "row",
     justifyContent: "space-between",
-    marginBottom: 40,
+    marginBottom: 32,
     borderBottomWidth: 1,
-    borderBottomColor: "#eee",
-    paddingBottom: 20,
+    borderBottomColor: "#e5e7eb",
+    paddingBottom: 16,
+  },
+  brandRow: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  brandLogo: {
+    width: 28,
+    height: 28,
+    marginRight: 8,
   },
   brand: {
     fontSize: 24,
     fontWeight: "bold",
     color: "#1677ff", // Ant Design primary color
+  },
+  tagline: {
+    fontSize: 10,
+    color: "#777",
+    marginTop: 4,
   },
   invoiceTitle: {
     fontSize: 20,
@@ -30,6 +53,12 @@ const styles = StyleSheet.create({
     marginTop: 10,
     flexDirection: "column",
     alignItems: "flex-end",
+  },
+  invoiceMetaBox: {
+    backgroundColor: "#f5f7ff",
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 4,
   },
   metaItem: {
     flexDirection: "row",
@@ -47,7 +76,7 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: "bold",
     marginBottom: 10,
-    color: "#555",
+    color: "#1677ff",
     borderBottomWidth: 1,
     borderBottomColor: "#eee",
     paddingBottom: 4,
@@ -72,7 +101,7 @@ const styles = StyleSheet.create({
     borderColor: "#e8e8e8",
     borderBottomWidth: 1,
     borderLeftWidth: 1,
-    backgroundColor: "#f9f9f9",
+    backgroundColor: "#f2f6ff",
     padding: 8,
   },
   tableCol: {
@@ -87,7 +116,7 @@ const styles = StyleSheet.create({
     margin: "auto",
     fontSize: 10,
     fontWeight: "bold",
-    color: "#555",
+    color: "#1677ff",
   },
   tableCell: {
     margin: "auto",
@@ -157,76 +186,76 @@ const InvoiceDocument = ({ sale }: InvoiceDocumentProps) => {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        {/* Header */}
-        <View style={styles.header}>
-          <View>
-            <Text style={styles.brand}>Opti Manage</Text>
-            <Text style={{ fontSize: 10, color: "#777", marginTop: 4 }}>Vision for the Future</Text>
-          </View>
-          <View style={styles.invoiceMeta}>
-            <Text style={styles.invoiceTitle}>INVOICE</Text>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Invoice #:</Text>
-              <Text>{invoiceId}</Text>
+        <View style={styles.card}>
+          <View style={styles.header}>
+            <View style={styles.brandRow}>
+              <Image style={styles.brandLogo} src={logo} />
+              <View>
+                <Text style={styles.brand}>Opti Manage</Text>
+                <Text style={styles.tagline}>Vision for the Future</Text>
+              </View>
             </View>
-            <View style={styles.metaItem}>
-              <Text style={styles.metaLabel}>Date:</Text>
-              <Text>{saleDate}</Text>
+            <View style={[styles.invoiceMeta, styles.invoiceMetaBox]}>
+              <Text style={styles.invoiceTitle}>INVOICE</Text>
+              <View style={styles.metaItem}>
+                <Text style={styles.metaLabel}>Invoice #:</Text>
+                <Text>{invoiceId}</Text>
+              </View>
+              <View style={styles.metaItem}>
+                <Text style={styles.metaLabel}>Date:</Text>
+                <Text>{saleDate}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.billTo}>
+            <Text style={styles.sectionTitle}>Bill To:</Text>
+            <Text style={{ fontSize: 14, marginBottom: 4 }}>{buyerName}</Text>
+          </View>
+
+          <View style={styles.table}>
+            <View style={styles.tableRow}>
+              <View style={{ ...styles.tableColHeader, width: "40%" }}>
+                <Text style={styles.tableCellHeader}>Item Description</Text>
+              </View>
+              <View style={{ ...styles.tableColHeader, width: "20%" }}>
+                <Text style={styles.tableCellHeader}>Quantity</Text>
+              </View>
+              <View style={{ ...styles.tableColHeader, width: "20%" }}>
+                <Text style={styles.tableCellHeader}>Unit Price</Text>
+              </View>
+              <View style={{ ...styles.tableColHeader, width: "20%" }}>
+                <Text style={styles.tableCellHeader}>Total</Text>
+              </View>
+            </View>
+
+            <View style={styles.tableRow}>
+              <View style={{ ...styles.tableCol, width: "40%" }}>
+                <Text style={styles.tableCell}>{productName}</Text>
+                {sale?.productId?.brand && (
+                  <Text style={{ fontSize: 8, color: "#777", marginTop: 2 }}>Brand: {sale.productId.brand}</Text>
+                )}
+              </View>
+              <View style={{ ...styles.tableCol, width: "20%" }}>
+                <Text style={styles.tableCell}>{quantity}</Text>
+              </View>
+              <View style={{ ...styles.tableCol, width: "20%" }}>
+                <Text style={styles.tableCell}>${unitPrice.toFixed(2)}</Text>
+              </View>
+              <View style={{ ...styles.tableCol, width: "20%" }}>
+                <Text style={styles.tableCell}>${totalAmount}</Text>
+              </View>
+            </View>
+          </View>
+
+          <View style={styles.totalSection}>
+            <View style={styles.totalRow}>
+              <Text style={styles.totalLabel}>Grand Total:</Text>
+              <Text style={styles.totalValue}>${totalAmount}</Text>
             </View>
           </View>
         </View>
 
-        {/* Bill To */}
-        <View style={styles.billTo}>
-          <Text style={styles.sectionTitle}>Bill To:</Text>
-          <Text style={{ fontSize: 14, marginBottom: 4 }}>{buyerName}</Text>
-        </View>
-
-        {/* Table */}
-        <View style={styles.table}>
-          <View style={styles.tableRow}>
-            <View style={{ ...styles.tableColHeader, width: "40%" }}>
-              <Text style={styles.tableCellHeader}>Item Description</Text>
-            </View>
-            <View style={{ ...styles.tableColHeader, width: "20%" }}>
-              <Text style={styles.tableCellHeader}>Quantity</Text>
-            </View>
-            <View style={{ ...styles.tableColHeader, width: "20%" }}>
-              <Text style={styles.tableCellHeader}>Unit Price</Text>
-            </View>
-            <View style={{ ...styles.tableColHeader, width: "20%" }}>
-              <Text style={styles.tableCellHeader}>Total</Text>
-            </View>
-          </View>
-
-          <View style={styles.tableRow}>
-            <View style={{ ...styles.tableCol, width: "40%" }}>
-              <Text style={styles.tableCell}>{productName}</Text>
-              {sale?.productId?.brand && (
-                <Text style={{ fontSize: 8, color: "#777", marginTop: 2 }}>Brand: {sale.productId.brand}</Text>
-              )}
-            </View>
-            <View style={{ ...styles.tableCol, width: "20%" }}>
-              <Text style={styles.tableCell}>{quantity}</Text>
-            </View>
-            <View style={{ ...styles.tableCol, width: "20%" }}>
-              <Text style={styles.tableCell}>${unitPrice.toFixed(2)}</Text>
-            </View>
-            <View style={{ ...styles.tableCol, width: "20%" }}>
-              <Text style={styles.tableCell}>${totalAmount}</Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Total */}
-        <View style={styles.totalSection}>
-          <View style={styles.totalRow}>
-            <Text style={styles.totalLabel}>Grand Total:</Text>
-            <Text style={styles.totalValue}>${totalAmount}</Text>
-          </View>
-        </View>
-
-        {/* Footer */}
         <View style={styles.footer}>
           <Text>Thank you for your business!</Text>
           <Text style={{ marginTop: 4 }}>© 2026 Opti Manage · All rights reserved.</Text>

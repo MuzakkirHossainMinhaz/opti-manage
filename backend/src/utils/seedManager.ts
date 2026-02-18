@@ -7,9 +7,13 @@ export const seedManager = async () => {
     return;
   }
 
-  const username = process.env.SEED_MANAGER_USERNAME || "Manager";
-  const email = process.env.SEED_MANAGER_EMAIL || "manager@example.com";
-  const password = process.env.SEED_MANAGER_PASSWORD || "Manager@2026";
+  const username = process.env.SEED_MANAGER_USERNAME;
+  const email = process.env.SEED_MANAGER_EMAIL;
+  const password = process.env.SEED_MANAGER_PASSWORD;
+
+  if (!username || !email || !password) {
+    throw new Error("Seed manager user credentials are not set in environment variables.");
+  }
 
   const hashedPassword = await bcrypt.hash(password, Number(process.env.BCRYPT_SALT_ROUNDS) || 10);
 

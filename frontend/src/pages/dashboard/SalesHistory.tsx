@@ -1,3 +1,4 @@
+/* eslint-disable no-case-declarations */
 import { DownloadOutlined, SearchOutlined } from "@ant-design/icons";
 import { PDFDownloadLink } from "@react-pdf/renderer";
 import type { InputRef, TableColumnType, TableColumnsType, TableProps } from "antd";
@@ -169,8 +170,8 @@ const SalesHistory: React.FC = () => {
       render: (_, record) => {
         return (
           <PDFDownloadLink document={<InvoiceDocument sale={record} />} fileName={`invoice-${record._id}.pdf`}>
-            {({ loading }) => (
-              <Button size="small" shape="round" loading={loading} icon={<DownloadOutlined />}>
+            {() => (
+              <Button size="small" shape="round" icon={<DownloadOutlined />}>
                 Download
               </Button>
             )}
@@ -284,12 +285,12 @@ const SalesHistory: React.FC = () => {
                   value: "all",
                 },
                 {
-                  label: "Weekly",
-                  value: "weekly",
-                },
-                {
                   label: "Daily",
                   value: "daily",
+                },
+                {
+                  label: "Weekly",
+                  value: "weekly",
                 },
                 {
                   label: "Monthly",

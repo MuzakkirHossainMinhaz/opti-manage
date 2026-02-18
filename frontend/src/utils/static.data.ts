@@ -61,7 +61,7 @@ export const lensMaterials = [
 ];
 
 export const brands = [
-  { label: "Pay-Ban", value: "ray-ban" },
+  { label: "Ray-Ban", value: "ray-ban" },
   { label: "Oakley", value: "oakley" },
   { label: "Prada", value: "prada" },
   { label: "Gucci", value: "gucci" },

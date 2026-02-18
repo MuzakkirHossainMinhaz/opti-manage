@@ -81,22 +81,24 @@ const SellEyeGlassModal = ({
           </div>
 
           <div className="responsive-flex">
-            <Button
-              className="my-font"
-              style={{
-                fontSize: "15px",
-                fontWeight: "600",
-                height: "37px",
-                marginTop: "4px",
-                width: "100%",
-              }}
-              type="primary"
-              htmlType="submit"
-              icon={<ShoppingCartOutlined />}
-              loading={isLoading}
-            >
-              Sell
-            </Button>
+            {!saleData && (
+              <Button
+                className="my-font"
+                style={{
+                  fontSize: "15px",
+                  fontWeight: "600",
+                  height: "37px",
+                  marginTop: "4px",
+                  width: "100%",
+                }}
+                type="primary"
+                htmlType="submit"
+                icon={<ShoppingCartOutlined />}
+                loading={isLoading}
+              >
+                Sell
+              </Button>
+            )}
             {saleData && (
               <PDFDownloadLink
                 document={<InvoiceDocument sale={saleData} />}

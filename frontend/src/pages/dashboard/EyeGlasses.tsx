@@ -74,6 +74,7 @@ const EyeGlasses: React.FC = () => {
   const [isReassignModalOpen, setIsReassignModalOpen] = useState(false);
   const [eyeGlassForReassign, setEyeGlassForReassign] = useState<any | null>(null);
   const [newOwnerId, setNewOwnerId] = useState<string | undefined>(undefined);
+  const [requestingEyeGlassId, setRequestingEyeGlassId] = useState<string | null>(null);
   const [createOwnershipRequest, { isLoading: isRequestCreating }] = useCreateOwnershipRequestMutation();
   const [reassignEyeGlassOwner, { isLoading: isReassigning }] = useReassignEyeGlassOwnerMutation();
   const { data: usersData, isLoading: isUsersLoading } = useGetUsersQuery(undefined, {
@@ -129,8 +130,9 @@ const EyeGlasses: React.FC = () => {
       const response = await createSales(sale).unwrap();
       setSaleData(response?.data);
       toast.success("Successfully sold.", { id: toastId });
-    } catch (error) {
-      toast.error("Failed to sell eye-glass.", { id: toastId });
+    } catch (error: any) {
+      const message = error?.data?.message || "Failed to sell eye-glass.";
+      toast.error(message, { id: toastId });
       return;
     }
   };
@@ -199,6 +201,7 @@ const EyeGlasses: React.FC = () => {
   };
 
   const handleRequestAccess = async (eyeGlassId: string) => {
+    setRequestingEyeGlassId(eyeGlassId);
     const toastId = toast.loading("Requesting access...");
 
     try {
@@ -207,6 +210,8 @@ const EyeGlasses: React.FC = () => {
     } catch (error: any) {
       const message = error?.data?.message || "Failed to request access.";
       toast.error(message, { id: toastId });
+    } finally {
+      setRequestingEyeGlassId(null);
     }
   };
 
@@ -237,24 +242,65 @@ const EyeGlasses: React.FC = () => {
   };
 
   // product delete handler
-  const handleDelete = async () => {
-    const toastId = toast.loading("Deleting...");
-
+  const handleDelete = () => {
     if (selectedRowKeys.length === 0) {
-      toast.error("Please select at least one item to delete.", {
-        id: toastId,
-      });
+      toast.error("Please select at least one item to delete.");
       return;
     }
 
-    try {
-      await deleteEyeGlass(selectedRowKeys);
-      toast.success("Successfully Deleted.", { id: toastId });
-      setSelectedRowKeys([]);
-    } catch (error) {
-      toast.error("Failed to delete.", { id: toastId });
-      return;
-    }
+    Modal.confirm({
+      title: (
+        <p
+          className="my-font"
+          style={{
+            fontSize: "18px",
+            fontWeight: "600",
+            paddingBottom: "12px",
+            borderBottom: "2px solid #e5e5e5",
+            color: "#1f1f1f",
+            margin: 0,
+          }}
+        >
+          Delete Selected Eye Glasses
+        </p>
+      ),
+      content: (
+        <p
+          style={{
+            marginTop: 16,
+            fontSize: "14px",
+          }}
+        >
+          Are you sure you want to delete {selectedRowKeys.length} selected item(s)? This action cannot be undone.
+        </p>
+      ),
+      icon: null,
+      centered: true,
+      okText: "Delete",
+      okType: "danger",
+      cancelText: "Cancel",
+      maskClosable: false,
+      okButtonProps: {
+        className: "my-font",
+        style: {
+          fontWeight: 600,
+        },
+      },
+      cancelButtonProps: {
+        className: "my-font",
+      },
+      onOk: async () => {
+        const toastId = toast.loading("Deleting...");
+        try {
+          await deleteEyeGlass(selectedRowKeys);
+          toast.success("Successfully Deleted.", { id: toastId });
+          setSelectedRowKeys([]);
+        } catch (error: any) {
+          const message = error?.data?.message || "Failed to delete.";
+          toast.error(message, { id: toastId });
+        }
+      },
+    });
   };
 
   // for filter
@@ -401,7 +447,11 @@ const EyeGlasses: React.FC = () => {
             />
           </Tooltip>
           {user?.role === "user" && record.createdBy && record.createdBy !== user._id && (
-            <Button size="small" onClick={() => handleRequestAccess(record._id)} loading={isRequestCreating}>
+            <Button
+              size="small"
+              onClick={() => handleRequestAccess(record._id)}
+              loading={requestingEyeGlassId === record._id && isRequestCreating}
+            >
               Request Access
             </Button>
           )}
@@ -513,15 +563,31 @@ const EyeGlasses: React.FC = () => {
         eyeGlassId={selectedEyeGlass?._id}
       />
       <Modal
+        title={
+          <p
+            className="my-font"
+            style={{
+              fontSize: "18px",
+              fontWeight: "600",
+              paddingBottom: "12px",
+              borderBottom: "2px solid #e5e5e5",
+              color: "#1f1f1f",
+              marginBottom: 0,
+            }}
+          >
+            Reassign Eye Glass Ownership
+          </p>
+        }
+        centered
         open={isReassignModalOpen}
         onCancel={() => setIsReassignModalOpen(false)}
         onOk={handleReassignConfirm}
         confirmLoading={isReassigning}
-        title="Reassign Ownership"
         okText="Reassign"
         okButtonProps={{ disabled: !newOwnerId }}
         destroyOnClose
         maskClosable={false}
+        width={520}
       >
         <div style={{ display: "flex", flexDirection: "column", gap: 12, marginTop: 8 }}>
           <div>
