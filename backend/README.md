@@ -43,7 +43,6 @@ Then fill in the values:
 - `BCRYPT_SALT_ROUNDS` – salt rounds for bcrypt (e.g. `10`)
 - `JWT_ACCESS_SECRET` – secret used to sign access tokens
 - `JWT_ACCESS_EXPIRES_IN` – access token expiry (e.g. `1h`)
-- (Optional) `SEED_MANAGER_USERNAME`, `SEED_MANAGER_EMAIL`, `SEED_MANAGER_PASSWORD` – overrides for the initial manager user
 
 ## Running the App
 
@@ -70,15 +69,20 @@ npm run build
 npm start
 ```
 
-## Initial Manager User
+## Default Demo Users
 
-On first startup, the server automatically seeds a manager user if no users exist. Defaults:
+On first startup (and every scheduled reset), the server automatically seeds demo users from `src/utils/seedUsers.ts`. By default:
 
-- Username: `Manager`
-- Email: `manager@example.com`
-- Password: `Manager@2026`
+- Manager:
+  - Username: `manager`
+  - Email: `manager@example.com`
+  - Password: `Manager123!`
+- Users:
+  - Username: `user`, Email: `user@example.com`, Password: `User123!`
+  - Username: `dahl`, Email: `dahl@example.com`, Password: `User123!`
+  - Username: `eich`, Email: `eich@example.com`, Password: `User123!`
 
-You can override these with the `SEED_MANAGER_*` environment variables described above.
+You can adjust or extend this list directly in `seedUsers.ts`.
 
 ## Linting and Formatting
 

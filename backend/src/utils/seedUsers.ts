@@ -36,6 +36,13 @@ export const seedUsers = async () => {
 
 const defaultUsers: SeedUser[] = [
   {
+    fullName: "Demo Manager",
+    username: "manager",
+    email: "manager@example.com",
+    password: "Manager123!",
+    role: "manager",
+  },
+  {
     fullName: "Demo User",
     username: "user",
     email: "user@example.com",

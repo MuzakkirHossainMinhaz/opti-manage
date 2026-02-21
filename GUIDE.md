@@ -40,9 +40,6 @@ Follow the steps in order to verify that the full application (backend + fronten
      BCRYPT_SALT_ROUNDS=10
      JWT_ACCESS_SECRET=some_long_random_secret
      JWT_ACCESS_EXPIRES_IN=1h
-     SEED_MANAGER_USERNAME=username
-     SEED_MANAGER_EMAIL=email@example.com
-     SEED_MANAGER_PASSWORD=password
      ```
 
    For a more detailed description of backend configuration and commands, see [backend/README.md](backend/README.md).
@@ -96,11 +93,11 @@ Follow the steps in order to verify that the full application (backend + fronten
 
 1. Browse to the frontend URL (for example `http://localhost:5173`).
 2. On the **Landing** page, click **Sign In** to go to the **Login** page.
-3. Use the seeded manager credentials (from the Login page / seeding logic):
+3. Use the seeded manager credentials:
 
    ```text
-   Username: username
-   Password: password
+   Username: manager
+   Password: Manager123!
    ```
 
 4. Click **Log In**.

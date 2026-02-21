@@ -109,7 +109,7 @@ The project consists of:
   - Centralized error handling and consistent API responses.
   - MongoDB database via Mongoose models.
   - Activity logging middleware to capture key actions.
-  - Initial manager seeding on startup.
+  - Automatic demo data seeding (manager, users, eye‑glasses) on startup and on a scheduled reset job.
 
 - **Frontend App**
   - React + TypeScript + Vite.
@@ -145,7 +145,6 @@ cd opti-manage
    - `PORT`, `NODE_ENV`
    - `BCRYPT_SALT_ROUNDS`
    - `JWT_ACCESS_SECRET`, `JWT_ACCESS_EXPIRES_IN`
-   - Optional `SEED_MANAGER_*` values if you want a custom initial manager.
 
 3. Start the backend in development mode:
 

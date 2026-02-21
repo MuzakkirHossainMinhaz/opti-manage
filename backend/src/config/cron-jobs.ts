@@ -1,7 +1,6 @@
 /* eslint-disable no-console */
 import mongoose from "mongoose";
 import { UserModel } from "../modules/user/user.model";
-import { seedManager } from "../utils/seedManager";
 import { seedProduct } from "../utils/seedProducts";
 import { seedUsers } from "../utils/seedUsers";
 
@@ -17,7 +16,6 @@ const resetDatabaseAndSeed = async () => {
 
     await mongoose.connection.db.dropDatabase();
 
-    await seedManager();
     await seedUsers();
 
     const manager = await UserModel.findOne({ role: "manager" }).lean();
