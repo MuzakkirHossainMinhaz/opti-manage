@@ -12,7 +12,7 @@ const routes_1 = __importDefault(require("./routes"));
 const app = (0, express_1.default)();
 //parsers
 app.use(express_1.default.json());
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ origin: process.env.CORS_ORIGIN }));
 // application routes
 app.use("/api", routes_1.default);
 // default route
