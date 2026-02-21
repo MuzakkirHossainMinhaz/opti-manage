@@ -18,6 +18,7 @@ export const seedManager = async () => {
   const hashedPassword = await bcrypt.hash(password, Number(process.env.BCRYPT_SALT_ROUNDS) || 10);
 
   await UserModel.create({
+    fullName: "Demo Manager",
     username,
     email,
     password: hashedPassword,

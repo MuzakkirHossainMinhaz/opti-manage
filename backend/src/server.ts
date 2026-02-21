@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import { Server } from "http";
 import mongoose from "mongoose";
 import app from "./app";
-import { seedManager } from "./utils/seedManager";
+import { initCronJobs } from "./config/cron-jobs";
 
 dotenv.config();
 
@@ -17,7 +17,7 @@ async function main() {
       console.log("⚡️Successfully connected to the database");
     });
 
-    await seedManager();
+    initCronJobs();
 
     // listen for requests
     server = app.listen(PORT, () => {

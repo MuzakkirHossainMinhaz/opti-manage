@@ -148,7 +148,19 @@ const Login = () => {
                   >
                     <Text strong>Manager:</Text>
                     <span>
-                      User: <Text code>Manager</Text> Pass: <Text code>Manager@2026</Text>
+                      User: <Text code>manager</Text> Pass: <Text code>Manager123!</Text>
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      display: "flex",
+                      justifyContent: "space-between",
+                      fontSize: "13px",
+                    }}
+                  >
+                    <Text strong>User:</Text>
+                    <span>
+                      User: <Text code>user</Text> Pass: <Text code>User123!</Text>
                     </span>
                   </div>
                 </div>
