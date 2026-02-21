@@ -43,6 +43,7 @@ Then fill in the values:
 - `BCRYPT_SALT_ROUNDS` – salt rounds for bcrypt (e.g. `10`)
 - `JWT_ACCESS_SECRET` – secret used to sign access tokens
 - `JWT_ACCESS_EXPIRES_IN` – access token expiry (e.g. `1h`)
+- `CORS_ORIGIN` – allowed frontend origin (e.g. `http://localhost:5173`)
 
 ## Running the App
 

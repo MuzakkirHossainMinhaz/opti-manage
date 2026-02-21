@@ -40,6 +40,7 @@ Follow the steps in order to verify that the full application (backend + fronten
      BCRYPT_SALT_ROUNDS=10
      JWT_ACCESS_SECRET=some_long_random_secret
      JWT_ACCESS_EXPIRES_IN=1h
+     CORS_ORIGIN=http://localhost:5173
      ```
 
    For a more detailed description of backend configuration and commands, see [backend/README.md](backend/README.md).

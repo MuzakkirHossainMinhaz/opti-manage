@@ -145,6 +145,7 @@ cd opti-manage
    - `PORT`, `NODE_ENV`
    - `BCRYPT_SALT_ROUNDS`
    - `JWT_ACCESS_SECRET`, `JWT_ACCESS_EXPIRES_IN`
+   - `CORS_ORIGIN` (frontend URL, e.g. `http://localhost:5173`)
 
 3. Start the backend in development mode:
 
